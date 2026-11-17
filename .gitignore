@@ -2,6 +2,7 @@ node_modules/
 .next/
 *.log
 .env*
+.infisical.yaml
 docs/mockup-assets/.preview-*.html
 
 # Superseded local design/research artifacts; keep the submission focused.
