@@ -1,0 +1,11 @@
+node_modules/
+.next/
+*.log
+.env*
+docs/mockup-assets/.preview-*.html
+
+# Superseded local design/research artifacts; keep the submission focused.
+mockup.html
+docs/mockup-assets/
+docs/superpowers/
+docs/research/
