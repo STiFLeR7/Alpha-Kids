@@ -58,7 +58,7 @@ Provider availability remains the principal operational limitation. No blanket �
 
 ## Latency and bounds
 
-For the 26 returned v3 replies: 1.722–18.859 seconds, median 8.767 seconds, nearest-rank p95 18.139 seconds. This small, mixed-route sample includes different call counts and is not a service-level objective.
+For the 26 returned v3 replies: 1.722–18.859 seconds, median 8.791 seconds (average of the two middle values, rounded), nearest-rank p95 18.139 seconds. This small, mixed-route sample includes different call counts and is not a service-level objective.
 
 A [maximum-history probe](evaluation/max-history-1794925750664.json) used eight maximum-length parent turns and seven maximum-length synthetic coach replies (29,904 request bytes). It returned a validated plan in **3.889 seconds**. The repeated filler was a size stress fixture, not a natural conversation or semantic-quality benchmark. Oversized-body and deadline behavior are covered separately by deterministic tests.
 

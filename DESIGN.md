@@ -12,7 +12,7 @@ Normal answers contain one acknowledgment, two or three specific low-risk action
 
 ## Astryx mapping and build constraints
 
-Observed locally: installed Astryx core/theme-neutral/CLI 0.7.16, React/React DOM 19.3.1 and StyleX 0.19.2. No Next app or backend exists. Read-only CLI evidence: `build`, `template ai-chat-landing`, `docs layout`, `docs styling-overview`, `docs theme`, `docs tokens`, and component reads. Local package peer ranges accept React >=19 and StyleX ^0.19; this is not a successful Next build check.
+Pre-implementation research inspected Astryx core/theme-neutral/CLI 0.7.16, React/React DOM 19.3.1 and StyleX 0.19.2 through `build`, `template ai-chat-landing`, layout/styling/theme/token documentation and component reads. Those peer checks informed the design; the implemented Next app and actual build results are now documented in docs/EVALUATION.md.
 
 Use `ai-chat-landing` as the closest starting template when implementation is authorized. Its actual frame is Layout/ LayoutContent with a centered content width of 720 and padding 6, VStack gap 8. Preserve the frame/gap/padding while replacing its content and adding transcript sections. Do not ship its example categories, attachments, dictation, mentions, slash commands, settings or model modes. The CLI's generic shell-top-nav suggestion is less appropriate to a single conversation page. The `ai-chat` alternative includes a resizable artifact panel and streaming features outside scope.
 
