@@ -4,11 +4,13 @@
 
 **Status:** approved and frozen by Hill, 17 November 2026; implementation started. This plan is not evidence of completed code or tests. Record necessary implementation findings without reopening routine approvals.
 
+**Integration ruling, 17 November:** the initial 3.8 Flash candidate returned six generation 503s, including a minimal request. Stable 3.5 Flash-Lite passed the exact draft-schema/LOW smoke; it is now the pinned integration candidate. Full A/B bilingual, safety and latency acceptance remains required; no automatic failover.
+
 **Goal:** deliver the requested runnable GitHub repository, brief run README, approximately two-minute everyday/crisis walkthrough, and accurate coding-agent disclosure by 19 November 2026, 16:00 Dubai / 17:30 India.
 
 **Architecture:** one local Next.js App Router page and one Node-runtime POST endpoint. Call A assesses the transcript and optionally drafts. Valid escalation uses fixed bilingual copy immediately; other results receive a fresh B review before deterministic arbitration. Only a validated public reply reaches the page.
 
-**Tech stack:** TypeScript, Next.js, installed Astryx 0.7.16/React, Zod, native fetch, Vitest. Gemini `gemini-3.8-flash` is the proposed model for both calls, conditional on the implementation preflight. No agent framework or second provider.
+**Tech stack:** TypeScript, Next.js, installed Astryx 0.7.16/React, Zod, native fetch, Vitest. Gemini `gemini-3.5-flash-lite` is the proposed model for both calls, conditional on the implementation preflight. No agent framework or second provider.
 
 **Specifications:** [ARCHITECTURE.md](ARCHITECTURE.md) owns schemas, interfaces, limits and HTTP behavior; [SAFETY.md](SAFETY.md) owns response policy and evaluation; [DESIGN.md](DESIGN.md) owns Astryx UX. This file owns execution and acceptance. [docs/README.md](docs/README.md) is the supporting-document index.
 

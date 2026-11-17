@@ -18,7 +18,7 @@ The agreed scope is one responsive conversation page, current-session history, a
 - [Execution plan](PLAN.md): foundation, parallel worker ownership, acceptance checks and delivery sequence.
 - [Supporting-document index](docs/README.md): current sources and planned evaluation/walkthrough records.
 
-The proposed provider is Gemini `gemini-3.8-flash`, subject to account access, schema and latency checks. One call assesses/drafts; a fresh second call reviews non-crisis results. Urgent/safeguarding replies use fixed bilingual server copy. No unchecked draft is displayed, and two calls to the same model are not a safety guarantee.
+The proposed provider is Gemini `gemini-3.5-flash-lite`, subject to account access, schema and latency checks. One call assesses/drafts; a fresh second call reviews non-crisis results. Urgent/safeguarding replies use fixed bilingual server copy. No unchecked draft is displayed, and two calls to the same model are not a safety guarantee.
 
 The hiring email is the requirements source. The submission consists of this GitHub repository with verified run instructions, an approximately two-minute recorded walkthrough showing everyday and crisis behavior, and an honest coding-agent disclosure. Due: **19 November 2026, 16:00 Dubai / 17:30 India**.
 

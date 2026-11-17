@@ -179,11 +179,12 @@ No generated phone numbers, country inference from Urdu, diagnosis, treatment/do
 
 ## Provider candidate and preflight gate
 
-Candidate: **`gemini-3.8-flash` for both calls**, pinned in server configuration, no automatic failover.
-Official [model catalog](https://aistudio.google.com/docs/models) and [model page](https://aistudio.google.com/docs/models/gemini-3.8-flash),
-checked 2026-11-17, list this stable ID and structured-output support. This verifies documentation, not this account's access.
+Candidate: **`gemini-3.5-flash-lite` for both calls**, pinned in server configuration, no automatic failover.
+Integration decision, 2026-11-17: the original 3.8 Flash candidate returned six generation 503s, including a minimal request without schema/settings. 3.7 is documented to redirect to 3.8. Stable 3.5 Flash-Lite passed the exact draft-schema/LOW smoke in 8.7 seconds; review-schema, bilingual behavior and complete latency checks remain mandatory.
+Official [model catalog](https://aistudio.google.com/docs/models) and [model page](https://aistudio.google.com/docs/models/gemini-3.5-flash-lite),
+checked 2026-11-17, list this stable ID and structured-output support. One exact draft-schema/LOW request succeeded on this account; full A/B and semantic acceptance remain open.
 Use native fetch and nonstreaming [generateContent REST](https://aistudio.google.com/api-reference/generate-content):
-`POST https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent`,
+`POST https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:generateContent`,
 `x-goog-api-key` header, `systemInstruction`, `contents`, `generationConfig` with JSON MIME/schema and output limits.
 The reference exposes `responseJsonSchema`; validate the exact supported schema subset in preflight against the
 [structured-output guide](https://aistudio.google.com/docs/structured-output). Reject blocked/missing/multiple unexpected candidates,
@@ -193,7 +194,7 @@ Proposed budgets: 30 seconds from route entry through final serialization; A <=1
 Start with A `maxOutputTokens: 2048`, B `1024`, and supported low thinking; preflight must establish sufficient
 reasoning/output headroom, especially Urdu. Cap each provider response body at 65,536 bytes before parsing; no automatic retry.
 Do not queue; two active local requests maximum, then 429. Release slots/timers in finally, including cancellation.
-Use low thinking initially (model page says minimal unsupported).
+LOW succeeded in the draft-schema smoke. Other thinking settings have not been evaluated.
 These are trial budgets, not latency promises: reasoning may consume output allowance and cause truncation.
 Never expose raw provider body/errors to the browser or logs.
 

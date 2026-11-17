@@ -17,7 +17,7 @@ node scripts/evaluate.mjs --base-url http://127.0.0.1:3000 --settings-ref 'Actua
 npm test -- tests/evaluate.test.ts
 ```
 
-Replace the settings reference with actual model, token caps, thinking level and supported generation settings; never include secrets. Candidate gemini-3.8-flash, proposed A/B caps 2048/1024 and LOW thinking remain unverified. Four foundation smoke requests returned HTTP 503; access, schema, LOW, latency and terms remain open. No substitution or safety pass is claimed.
+Replace the settings reference with actual model, token caps, thinking level and supported generation settings; never include secrets. Integration candidate gemini-3.5-flash-lite uses proposed A/B caps 2048/1024 and LOW thinking. The original 3.8 candidate returned six generation HTTP 503s, including a minimal request without schema/settings. On 17 November, 3.5 Flash-Lite returned HTTP 200/STOP with a locally valid exact draft-schema response in 8.7 seconds. This is a documented preflight-driven model revision, not automatic failover. Review-schema, integrated bilingual/safety/latency checks and account processing terms remain open; no live matrix pass is claimed.
 
 Default artifacts: `docs/evaluation/live-<date>-<UUID>.json`. Only fictional synthetic conversations belong in these intentional evaluation records. Artifacts contain UTC date, settings reference, exact requests, validated public responses/status, duration and mechanical checks. Headers, credentials, unrelated environment and raw malformed/provider bodies are omitted. Unique filenames and exclusive creation preserve previous failures and explicit reruns. No automatic retry.
 
