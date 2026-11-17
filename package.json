@@ -2,7 +2,7 @@
   "name": "alpha-kids",
   "version": "0.0.0",
   "private": true,
-  "description": "Alpha Kids parent-coach design prototype and local UI tooling",
+  "description": "Local English/Urdu parent coach with practical support and check-ins",
   "scripts": {
     "astryx": "node node_modules/@astryxdesign/cli/clients/cli/bin/astryx.mjs",
     "dev": "next dev --hostname 127.0.0.1",

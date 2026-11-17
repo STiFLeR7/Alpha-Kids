@@ -103,7 +103,7 @@ Use `getUiCopy(language: Language): UiCopy` for UI strings; define that returned
 | `lib/copy.ts` | Static UI strings; bilingual fixed replies keyed by exact route/reason; no provider text. |
 | `app/api/coach/route.ts` | Node runtime; bounded body/origin validation, slot/deadline, invoke coach, public envelope/status. |
 | `lib/coach.ts` | Server-only policy/prompts, sequential A/B, local validation and pure arbitration. |
-| `lib/gemini.ts` | Server-only fetch/envelope parser; one provider, no framework or generic adapter layer. |
+| `lib/openrouter.ts` | Server-only fetch/envelope parser; one pinned free model, no framework or generic adapter layer. |
 | `lib/chat-state.ts` | Pure UI reducer; one outstanding parent turn, request identity, retry/reset/cancel transitions. |
 | `lib/locale.ts` | Shared explicit-language/fallback-script selection; no country inference. |
 | `lib/errors.ts` | Controlled server failure type and reason; no provider payload. |
@@ -122,7 +122,7 @@ declare function arbitrate(a: DraftResult, b: ReviewResult): Reply | null;
 declare function coach(input: CoachRequest, ctx: CallContext): Promise<Reply>;
 declare function generateJson(args: { system: string; input: string; schema: object;
   maxOutputTokens: number }, ctx: CallContext): Promise<unknown>;
-// lib/gemini.ts owns generateJson; lib/coach.ts owns all four policy functions.
+// lib/openrouter.ts owns generateJson; lib/coach.ts owns all four policy functions.
 ```
 
 Controlled server failures use `CoachError` with an enumerated `UnavailableReason`; put it in `lib/errors.ts`.
@@ -178,29 +178,23 @@ No generated phone numbers, country inference from Urdu, diagnosis, treatment/do
 
 ## Provider and verification
 
-Implemented: **`gemini-3.5-flash-lite` for both calls**, pinned in lib/gemini.ts, no automatic failover. Current prompts are DRAFT_SYSTEM_V3 and REVIEW_SYSTEM_V3 in lib/coach.ts.
-Integration decision, 2026-11-17: the original 3.8 Flash candidate returned six generation 503s, including a minimal request without schema/settings. 3.7 is documented to redirect to 3.8. Stable 3.5 Flash-Lite passed the exact draft-schema/LOW smoke in 8.7 seconds; review-schema, bilingual behavior and complete latency checks remain mandatory.
-Official [model catalog](https://aistudio.google.com/docs/models) and [model page](https://aistudio.google.com/docs/models/gemini-3.5-flash-lite),
-checked 2026-11-17, list this stable ID and structured-output support. Real English/Urdu A+B runs and crisis routes have been exercised; dated results, prompt corrections and residual failures are in docs/EVALUATION.md.
-Use native fetch and nonstreaming [generateContent REST](https://aistudio.google.com/api-reference/generate-content):
-`POST https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:generateContent`,
-`x-goog-api-key` header, `systemInstruction`, `contents`, `generationConfig` with JSON MIME/schema and output limits.
-The reference exposes `responseJsonSchema`; validate the exact supported schema subset in preflight against the
-[structured-output guide](https://aistudio.google.com/docs/structured-output). Reject blocked/missing/multiple unexpected candidates,
-non-STOP finish reasons, tool parts, invalid JSON/schema; extract only expected non-thought text.
+Implemented: **`particle-ai/particle-1:free` for both calls through OpenRouter**, pinned in lib/openrouter.ts. Current prompts remain DRAFT_SYSTEM_V3 and REVIEW_SYSTEM_V3 in lib/coach.ts. The user authorized this replacement on 17 November 2026 after intermittent Gemini failures. Historical observations remain in docs/EVALUATION.md.
+
+Native fetch posts to `https://openrouter.ai/api/v1/chat/completions`, with server-only `OPENROUTER_API_KEY` Bearer authentication, system/user messages, and `response_format.type: json_schema` with `strict: true`. [Official structured-output guidance](https://openrouter.ai/docs/guides/features/structured-outputs) supports this format; local Zod validation remains authoritative. Use `provider.require_parameters: true`, `allow_fallbacks: false`, and zero prompt/completion/request price caps. No automatic model/key rotation, retries or paid fallback. Next loads reviewer configuration from ignored `.env`; the owner can continue injecting the same environment variable from vault.
+
+Accept exactly one `chat.completion` choice with `finish_reason: stop`, assistant role and nonblank string content. Reject provider errors, refusal, function/tool calls, truncation, malformed JSON and schema failures. Parse only message content; reasoning fields never enter the public reply. Reasoning and streaming are disabled. [Model pricing and capabilities](https://openrouter.ai/particle-ai/particle-1:free) were checked on 17 November 2026.
 
 Implemented budgets: 30 seconds from route entry through final serialization; A <=14s, B <=14s and <=remaining budget minus 1s.
-A uses `maxOutputTokens: 2048`, B `1024`, with LOW thinking. Cap each provider response body at 65,536 bytes before parsing; no automatic retry.
+A uses `max_tokens: 2048`, B `1024`, with `reasoning: {enabled:false, exclude:true}`. Cap each provider response body at 65,536 bytes before parsing; no automatic retry.
 Do not queue; two active local requests maximum, then 429. Release slots/timers in finally, including cancellation.
-LOW succeeded in the draft-schema smoke. Other thinking settings have not been evaluated.
-These are trial budgets, not latency promises: reasoning may consume output allowance and cause truncation.
+These limits are deadlines rather than latency promises; overlong output or provider delays return a controlled failure.
 Never expose raw provider body/errors to the browser or logs.
 
 The approved implementation run includes a synthetic live preflight via vault-injected server key; no separate permission loop is planned:
 verify access/quota/billing, exact request/schema/settings, normal EN/UR two-call runs and fixed crisis routing.
 Measure complete A+B latency at shortest and maximum allowed history and review truncation/errors.
 If it cannot reliably fit 30s, revise the budget/model decision explicitly; never skip review to meet a stopwatch.
-Observed access and latency do not establish reliability, clinical quality or zero retention. The evaluation record preserves provider errors, one deadline and residual quality issues; actual account billing/retention settings remain unverified.
+Observed access and latency do not establish reliability, clinical quality or zero retention. Free quota is shared across API keys and can limit evaluations and repeated use. Provider processing/account privacy settings remain separate from the app's memory-only history.
 
 ## HTTP and UI lifecycle
 

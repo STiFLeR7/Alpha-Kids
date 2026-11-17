@@ -1,12 +1,12 @@
 # Alpha Kids parent coach
 
-A local English/Urdu parenting-coach demo built with Next.js, TypeScript and Astryx. An adult parent describes a concern and gets a short practical plan with a check-in, one clarifying question, or a clear referral to human support.
+A local English/Urdu parent coach built with Next.js, TypeScript and Astryx. An adult parent describes a concern and gets a short practical plan with a check-in, one clarifying question, or a clear referral to human support.
 
-**[Watch the two-minute walkthrough](docs/walkthrough.mp4).** The app runs locally and includes real English/Urdu evaluation evidence. [Known limitations](docs/EVALUATION.md) include intermittent provider failures and an unnecessary Urdu clarification; this is not a clinically validated or production-ready service.
+**[Watch the two-minute walkthrough](docs/walkthrough.mp4).** The app runs locally and includes English/Urdu evaluation evidence. Both recorded cases succeeded, but the wider free-provider run returned only 4 usable replies from 17 requests. [Evaluation details](docs/EVALUATION.md) preserve those failures and the remaining language/accessibility checks.
 
 ## Run locally
 
-Requires **Node.js 24.x**, npm, and a Gemini API key with access to **`gemini-3.5-flash-lite`**.
+Requires **Node.js 24.x**, npm, and an OpenRouter API key. Both calls use **`particle-ai/particle-1:free`**.
 
 ```sh
 git clone https://github.com/STiFLeR7/Alpha-Kids.git
@@ -14,23 +14,34 @@ cd Alpha-Kids
 npm ci
 ```
 
-Supply `GEMINI_API_KEY` through your server process environment or secret manager. No `.env` file is required. For PowerShell 7:
+Copy the secret-free [`.env.example`](.env.example) to a local `.env`:
+
+```sh
+cp .env.example .env
+```
+
+For PowerShell:
 
 ```powershell
-$env:GEMINI_API_KEY = Read-Host 'Gemini API key' -MaskInput
+Copy-Item .env.example .env
+```
+
+Edit `.env` and set `OPENROUTER_API_KEY` to your own OpenRouter key, then run:
+
+```sh
 npm run dev
 ```
 
-Open **http://127.0.0.1:3000**. The key stays on the server. The owner's development environment uses vault injection; reviewers do not need that vault.
+Open **http://127.0.0.1:3000**. Next.js loads `.env` natively; restart the server after changing it. Keep `.env` local and ignored. Never prefix the key with `NEXT_PUBLIC_`: it belongs only on the server. The owner's secrets remain vault-managed; reviewers do not need that vault.
 
-For a production build, keep the key in the same process environment:
+For a production build:
 
 ```sh
 npm run build
 npm start
 ```
 
-The server binds to loopback. It rejects cross-origin requests and is scoped to a local demo, with no hosting, authentication or database.
+The server binds to loopback. It rejects cross-origin requests and is scoped to a local application, with no hosting, authentication or database.
 
 ## Try it
 
@@ -43,7 +54,7 @@ History lives only in the page and clears on refresh/reset. Cancel preserves the
 ## How the guardrails work
 
 1. The server checks origin, body size, strict request schema and concurrency limits.
-2. Gemini assesses the supplied conversation and optionally drafts a response. Valid urgent/safeguarding routes immediately select fixed bilingual server copy.
+2. Particle-1 assesses the supplied conversation and optionally drafts a response. Valid urgent/safeguarding routes immediately select fixed bilingual server copy.
 3. Other responses receive a fresh model review of the transcript and candidate wording, without the first call's current classification. Deterministic arbitration selects fixed copy or releases the checked response.
 4. Strict validation, deadlines and fixed errors prevent failed/rejected drafts from reaching the page. Responses are not streamed.
 
@@ -61,14 +72,16 @@ npm run astryx -- doctor --built .
 With the local app running, evaluate the fictional scenario matrix:
 
 ```sh
-npm run eval -- --settings-ref "gemini-3.5-flash-lite; LOW; draft2048/review1024; see docs/EVALUATION.md for prompt revision"
+npm run eval -- --settings-ref "OpenRouter particle-ai/particle-1:free; reasoning disabled; draft2048/review1024; promptsV3"
 ```
 
 The runner writes dated evidence in `docs/evaluation/`, preserves failures and performs no automatic retries. Exit zero establishes mechanical checks only. See [evaluation](docs/EVALUATION.md) and [walkthrough](docs/WALKTHROUGH.md) for results and recording status.
 
 ## Data and provider limits
 
-Use fictional, non-identifying examples. The app does not persist conversations, but messages and history are sent to Google. Google's [Gemini terms](https://aistudio.google.com/docs/terms) distinguish paid and unpaid processing; unpaid inputs may be used for product improvement and human review. Paid access does not itself mean zero retention. Account billing/retention settings have not been independently verified. This is an adult-parent developer demo, not a child-facing app or medical/legal service.
+Use fictional, non-identifying examples. Messages and history go through OpenRouter to Particle AI. The app does not persist conversations; the providers' [processing and retention policies](https://openrouter.ai/docs/guides/privacy/provider-logging) still apply. Account privacy settings have not been independently verified. This is an application for adult parents, not a child-facing app or medical/legal service.
+
+The pinned [:free model](https://openrouter.ai/particle-ai/particle-1:free) has zero token pricing. Requests also set zero price caps and disable provider fallback. OpenRouter's [free-tier limits](https://openrouter.ai/docs/api_reference/limits) apply across keys: currently 20 requests/minute and 50/day on an unfunded account. Ordinary answers use two model calls, while a validated urgent/safeguarding route uses one. Additional keys do not raise those limits. Availability is not guaranteed; the app preserves your message when a request fails.
 
 ## Documentation and coding agents
 

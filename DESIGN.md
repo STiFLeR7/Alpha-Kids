@@ -4,7 +4,7 @@ Status: approved design implemented on 17 November 2026; final verification rema
 
 ## Experience
 
-One responsive page for an adult parent to describe a concern in English or Urdu, receive brief practical support, and continue the conversation. No intake form. Header: Alpha Kids / Parent coach, prototype label, language control, New conversation. Main column: short welcome, transcript, labeled multiline composer, Send, and concise scope/privacy copy. Three optional everyday example buttons fill the composer without sending; remove them once the conversation begins.
+One responsive page for an adult parent to describe a concern in English or Urdu, receive brief practical support, and continue the conversation. No intake form. Header: Alpha Kids / Parent coach, language control, New conversation. Main column: short welcome, transcript, labeled multiline composer, Send, and concise scope/privacy copy. Three optional everyday example buttons fill the composer without sending; remove them once the conversation begins.
 
 Welcome: “What's been difficult today?” Explain English/Urdu input. Near the composer: general parenting support, not diagnosis or medical/legal instructions; messages go to the model provider; this app keeps history only in this page's memory. Do not imply provider zero retention, confidentiality, professional credentials, or that the app monitors emergencies. No voice, uploads, dashboards, scores, tracker, gamification, mascot or avatar persona.
 
@@ -67,4 +67,4 @@ The server performs call A classification/drafting, schema validation, immediate
 3. **Response presentation:** map only final validated public variants. Acceptance: ordinary output has brief actions/check-in, clarification asks one question, crisis has fully visible immediate support and no waiting invitation; invalid/rejected/provider-blocked output exposes no draft.
 4. **Verification and recording:** component/build/doctor checks; synthetic English/Urdu normal, crisis, safeguarding, boundary and failure examples; keyboard/RTL/zoom checks. Acceptance: record actual results and limitations, then capture approximately two minutes of the running app showing everyday/follow-up, Urdu and crisis. No live model test or accessibility pass is claimed here.
 
-Submission is GitHub repository + README + recording, due Thursday 19 November 2026, 16:00 Dubai / 17:30 India; no hosted demo. Parent orchestrator owns final README/PLAN integration, artifact cleanup and Waypoint log.
+Submission is GitHub repository + README + recording, due Thursday 19 November 2026, 16:00 Dubai / 17:30 India; no hosted application. Parent orchestrator owns final README/PLAN integration, artifact cleanup and Waypoint log.

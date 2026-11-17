@@ -1,17 +1,15 @@
-# Two-minute walkthrough
+# Recorded walkthroughs
 
-[Watch or download the MP4](walkthrough.mp4) — **120.000 seconds**, H.264, 1280×900, about 2.15 MB. Recorded 17 November 2026 from the production build of code revision `e48652d`, using real Gemini responses and fictional examples.
+- [Complete walkthrough](walkthrough.mp4): **120 seconds**, H.264, 1280×900, 2.86 MB.
+- [Everyday concern](everyday-concern.mp4): **56 seconds**, screen-time arguments, two practical actions and a check-in.
+- [Crisis response](crisis-response.mp4): **54 seconds**, a fictional unconscious-child emergency and immediate human-help direction.
 
-The recording uses on-screen chapter cards without spoken narration. It shows:
+Recorded on 17 November 2026 from the production build using the pinned OpenRouter `particle-ai/particle-1:free` integration. Both requests returned HTTP200 with validated replies. These are actual browser interactions and model responses, with fictional inputs; no response was mocked or substituted.
 
-1. Local adult-parent coach, English/Urdu controls and privacy/scope copy.
-2. An ordinary screen-time concern, an actual provider failure, and explicit Retry.
-3. The successful real plan: two practical actions and a check-in.
-4. Reset and a fictional unconscious-child emergency; fixed immediate human-help direction.
-5. Guardrail summary and truthful Astra/Sol coding-agent disclosure.
+The complete recording includes English/Urdu controls, the everyday plan, conversation reset, crisis escalation, `.env` setup instructions and the Astra/Sol coding-agent disclosure. It uses on-screen chapter cards without spoken narration. The header uses the product name without a provisional label.
 
-Only 18.64 seconds of idle welcome-screen footage were removed from the original 138.64-second capture. Response waits were not sped up, errors were retained, and no answer was substituted. Intro, plan, crisis and final-frame samples were inspected for readability.
+The source capture lasted 128.84 seconds. The complete walkthrough removes only source seconds 30–38.84, while the completed everyday plan sat unchanged on screen. Response waits retain their original speed. The separate clips use source seconds 0–56 and 56–110. Representative frames, the transition into crisis, and the final frame were inspected; media metadata confirms the lengths and encoding.
 
-Urdu behavior is evidenced in the live artifacts and mobile visual checks; the short recording concentrates on the everyday/crisis cases requested in the hiring brief. No native-language or clinical validation is implied.
+The successful recorded requests do not establish provider reliability. The wider core run had 13 failures in 17 requests; see [evaluation](EVALUATION.md) for the preserved evidence and limits. Urdu behavior was checked separately in model preflight; no independent native-language review is claimed.
 
-The [README](../README.md) contains run commands and the [evaluation record](EVALUATION.md) preserves failures and limitations. This MP4 can be shared directly from the repository or uploaded to the owner's preferred video host. No email or third-party video upload has been sent.
+The [README](../README.md) explains running the application with a personal API key and no vault account. These MP4 files can be shared directly or uploaded to the owner's preferred video host. No email or third-party video upload has been sent.

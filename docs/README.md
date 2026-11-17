@@ -12,6 +12,6 @@ Root documents describe the app and its approved design. This folder contains ve
 | [Evaluation](EVALUATION.md) | Actual offline/live checks, failures, prompt revisions and remaining limitations. |
 | [Scenario fixtures](../tests/fixtures/scenarios.json) | Fictional regression conversations and expected routes. |
 | [Run artifacts](evaluation/) | Dated synthetic requests, validated public responses, timing and mechanical checks. |
-| [Walkthrough](WALKTHROUGH.md) | Recording status and two-minute demonstration outline. |
+| [Walkthrough](WALKTHROUGH.md) | Recording status and two-minute walkthrough outline. |
 
 The older standalone mockup, mascot assets, local research and agent scratch reports are excluded from the submission. They are not dependencies or evidence of current live behavior. Evaluation artifacts deliberately contain fictional examples; normal app conversations are not logged.

@@ -8,8 +8,8 @@ const draft = {
  candidate:{kind:'coach',reason:'everyday_parenting',language:'en',acknowledgment:'SENTINEL',steps:['Pause.','Listen.'],checkIn:'How did it go?'},
 };
 const review = {assessment:draft.route,decision:'accept',checks:{prohibitedAdvice:false,inventedFacts:false,languageMismatch:false,missingCheckIn:false,harmfulParenting:false}};
-function envelope(value:unknown, thought?:unknown) {
- return new Response(JSON.stringify({candidates:[{finishReason:'STOP',content:{parts:[{text:JSON.stringify(value),...(thought===undefined?{}:{thought})}]}}]}));
+function envelope(value:unknown, finishReason = 'stop') {
+ return new Response(JSON.stringify({object:'chat.completion',choices:[{finish_reason:finishReason,message:{role:'assistant',content:JSON.stringify(value)}}]}));
 }
 function request() {
  return new Request('http://127.0.0.1:3000/api/coach',{
@@ -19,7 +19,7 @@ function request() {
 }
 afterEach(() => {vi.unstubAllGlobals();vi.unstubAllEnvs();});
 it('keeps the actual A sentinel out of the public response when B fails', async () => {
- vi.stubEnv('GEMINI_API_KEY','fiction');
+ vi.stubEnv('OPENROUTER_API_KEY','fiction');
  const fetchMock=vi.fn().mockResolvedValueOnce(envelope(draft)).mockResolvedValueOnce(new Response('SENTINEL provider detail',{status:503}));
  vi.stubGlobal('fetch',fetchMock);
  const response=await POST(request());
@@ -30,9 +30,9 @@ it('keeps the actual A sentinel out of the public response when B fails', async 
  expect(JSON.stringify(payload)).not.toContain('SENTINEL');
  expect(fetchMock).toHaveBeenCalledTimes(2);
 });
-for (const thought of ['true',1,null]) it(`blocks malformed thought ${thought} before public release`, async () => {
- vi.stubEnv('GEMINI_API_KEY','fiction');
- const fetchMock=vi.fn().mockResolvedValueOnce(envelope(draft,thought)).mockResolvedValueOnce(envelope(review));
+for (const finishReason of ['length','error','tool_calls']) it(`blocks finish reason ${finishReason} before public release`, async () => {
+ vi.stubEnv('OPENROUTER_API_KEY','fiction');
+ const fetchMock=vi.fn().mockResolvedValueOnce(envelope(draft,finishReason)).mockResolvedValueOnce(envelope(review));
  vi.stubGlobal('fetch',fetchMock);
  const response=await POST(request());
  const payload=await response.json();

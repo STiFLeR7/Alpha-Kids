@@ -93,7 +93,7 @@ Also manually check explicit English/Urdu/Auto, fixed bilingual crisis/error tem
 
 ## Privacy and integration decisions
 
-Keep transcript in browser memory only; reset/refresh clears it. The full bounded transcript is sent to the server and model provider on each request. No app conversation logs, persistence or analytics; do not log bodies, drafts or provider response text in error handling. Provider processing/retention depends on actual service terms and account configuration and remains unverified. Explain this near input and in README; recommend fictional examples for the demo and avoiding identifying child details. No zero-retention claim.
+Keep transcript in browser memory only; reset/refresh clears it. The full bounded transcript is sent to the server and model provider on each request. No app conversation logs, persistence or analytics; do not log bodies, drafts or provider response text in error handling. Provider processing/retention depends on actual service terms and account configuration and remains unverified. Explain this near input and in README; recommend fictional examples for the application and avoiding identifying child details. No zero-retention claim.
 
 Implementation tasks: (1) shared state/reason schemas and fixed bilingual copy; (2) endpoint validation, A/B arbitration and mocked failure checks; (3) UI language, safe rendering, cancellation and error behavior; (4) live matrix, honest result record and walkthrough. Acceptance is the gates above; no additional safety service/framework is proposed.
 

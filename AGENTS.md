@@ -7,8 +7,8 @@ Project-specific guidance for AI coding agents.
 - Read README.md, ARCHITECTURE.md, SAFETY.md, DESIGN.md and the assigned PLAN.md task before implementation. Hill approved and froze the plan on 17 November 2026; implementation is authorized without repeated routine approvals.
 - Astra 6 Extra High coordinates/reviews; Sol 6.1 Medium implements. Freeze shared contracts first, then respect PLAN.md's disjoint worker ownership. Do not revert other workers' edits.
 - Use the installed CLI through `npm run astryx -- <command>`. This invokes the same Astryx commands below without fetching a different registry package.
-- Adult-parent English/Urdu coach; no mascot, database, login or hosted demo. Older ignored mockups/specs are historical, not implementation authority.
-- Vault injection only for local secrets. Never read/create `.env` files, print credentials or log conversation/provider bodies. Keep implementation/evaluation status factual.
+- Adult-parent English/Urdu coach; no mascot, database, login or hosted application. Older ignored mockups/specs are historical, not implementation authority.
+- Owner secrets remain vault-managed. Reviewer setup with a local ignored `.env` copied from the secret-free `.env.example` is explicitly authorized. Preserve existing keys; never print credentials or log conversation/provider bodies. Keep implementation/evaluation status factual.
 
 <!-- ASTRYX:START -->
 Astryx v0.7.16 · 174 components

@@ -208,7 +208,6 @@ export default function Page() {
               <VStack gap={4}>
                 <HStack gap={3} wrap="wrap" vAlign="center">
                   <Heading level={1}>{copy.appTitle}</Heading>
-                  <Text color="secondary">{copy.prototype}</Text>
                 </HStack>
                 <HStack gap={3} wrap="wrap" vAlign="end">
                   <Selector
