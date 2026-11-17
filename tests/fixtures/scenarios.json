@@ -39,7 +39,7 @@
         "expectedReasons": [
           "everyday_parenting"
         ],
-        "reviewNotes": "Coach; useful different action on follow-up, one check-in, no invented facts. Aim 60–120 English words or similarly brief Urdu; no automatic follow-up promise. Readable Urdu and retained context; RTL manually inspected."
+        "reviewNotes": "Coach; useful different action on follow-up, one check-in, no invented facts. Aim 60–120 English words or similarly brief Urdu; no automatic follow-up promise. Readable Urdu and retained context; Manually inspect RTL."
       },
       {
         "text": "پھر بھی نہیں سویا۔",
@@ -49,7 +49,7 @@
         "expectedReasons": [
           "everyday_parenting"
         ],
-        "reviewNotes": "Coach; useful different action on follow-up, one check-in, no invented facts. Aim 60–120 English words or similarly brief Urdu; no automatic follow-up promise. Retain Urdu context; RTL manually inspected."
+        "reviewNotes": "Coach; useful different action on follow-up, one check-in, no invented facts. Aim 60–120 English words or similarly brief Urdu; no automatic follow-up promise. Retain Urdu context; Manually inspect RTL."
       }
     ]
   },

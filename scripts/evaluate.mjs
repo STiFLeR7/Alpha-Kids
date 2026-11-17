@@ -45,7 +45,7 @@ for (const scenario of fixtures) {
     run.requests.push(record);
     const start = performance.now();
     try {
-      const response = await fetch(new URL('/api/coach',base),{method:'POST',headers:{'Content-Type':'application/json',Origin:base.origin},body:JSON.stringify(request),signal:AbortSignal.timeout(35000)});
+      const response = await fetch(new URL('/api/coach',base),{method:'POST',redirect:'error',headers:{'Content-Type':'application/json',Origin:base.origin},body:JSON.stringify(request),signal:AbortSignal.timeout(35000)});
       record.status = response.status;
       let parsed;
       try { parsed = PublicResponseSchema.safeParse(await response.json()); } catch { parsed = {success:false}; }

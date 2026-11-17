@@ -13,10 +13,11 @@ test('runner chains public replies, stops failures, and preserves separately ide
     let raw = '';
     for await (const chunk of req) raw += chunk;
     const body = JSON.parse(raw);
-    received.push({body, origin:req.headers.origin});
+    received.push({body, origin:req.headers.origin, url:req.url});
     const text = body.transcript.at(-1).text;
     res.setHeader('Content-Type','application/json');
-    if (text === 'http') { res.statusCode = 503; res.end(JSON.stringify({private:'DO NOT STORE PROVIDER BODY'})); }
+    if (text === 'redirect' && req.url !== '/redirect-target') { res.statusCode = 307; res.setHeader('Location',`${origin}/redirect-target`); res.end(); }
+    else if (text === 'http') { res.statusCode = 503; res.end(JSON.stringify({private:'DO NOT STORE PROVIDER BODY'})); }
     else if (text === 'schema') res.end(JSON.stringify({private:'DO NOT STORE INVALID BODY'}));
     else if (text === 'identity') res.end(JSON.stringify({ok:true,requestId:'00000000-0000-4000-8000-000000000000',reply}));
     else res.end(JSON.stringify({ok:true,requestId:body.requestId,reply}));
@@ -27,7 +28,7 @@ test('runner chains public replies, stops failures, and preserves separately ide
   const turn = (text:string, expectedKinds=['coach'], expectedReasons=['everyday_parenting']) => ({text,expectedKinds,expectedReasons,reviewNotes:'STUB ONLY'});
   const fixtures = [
     {id:'chain',family:1,replyLanguage:'en',turns:[turn('first'),turn('second')]},
-    ...['http','schema','identity'].map(id=>({id,family:1,replyLanguage:'en',turns:[turn(id),turn('must not send')]})),
+    ...['http','schema','identity','redirect'].map(id=>({id,family:1,replyLanguage:'en',turns:[turn(id),turn('must not send')]})),
     {id:'mismatch',family:3,replyLanguage:'en',turns:[turn('mismatch',['clarify'],['missing_context']),turn('must not send')]},
   ];
   const fixture = join(dir,'fixtures.json');
@@ -45,8 +46,9 @@ test('runner chains public replies, stops failures, and preserves separately ide
     const report = JSON.parse(original);
     expect(report.evidence).toBe('stub');
     expect(report.semanticReview).toBe('pending');
-    expect(report.runs.map((r:any)=>r.failure)).toEqual([null,'http','schema','request_id','route_mismatch']);
-    expect(report.runs.map((r:any)=>r.requests.length)).toEqual([2,1,1,1,1]);
+    expect(report.runs.map((r:any)=>r.failure)).toEqual([null,'http','schema','request_id','transport','route_mismatch']);
+    expect(report.runs.map((r:any)=>r.requests.length)).toEqual([2,1,1,1,1,1]);
+    expect(received.some(r=>r.url==='/redirect-target')).toBe(false);
     expect(report.modelSettingsReference).toBe('STUB ONLY');
     expect(report.runs.every((r:any)=>r.requests.every((q:any)=>q.durationMs >= 0))).toBe(true);
     expect(received[1].body.transcript).toEqual([{role:'user',text:'first'},{role:'assistant',reply},{role:'user',text:'second'}]);
