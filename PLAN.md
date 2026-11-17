@@ -4,6 +4,8 @@
 
 **Status:** approved and frozen by Hill, 17 November 2026; implementation started. This plan is not evidence of completed code or tests. Record necessary implementation findings without reopening routine approvals.
 
+**Execution checkpoint:** foundation, server, UI and evaluation tooling are implemented. Integration fixes and live evaluations are underway. The checklist below is the original task contract; current evidence and remaining gates live in [docs/EVALUATION.md](docs/EVALUATION.md).
+
 **Integration ruling, 17 November:** the initial 3.8 Flash candidate returned six generation 503s, including a minimal request. Stable 3.5 Flash-Lite passed the exact draft-schema/LOW smoke; it is now the pinned integration candidate. Full A/B bilingual, safety and latency acceptance remains required; no automatic failover.
 
 **Goal:** deliver the requested runnable GitHub repository, brief run README, approximately two-minute everyday/crisis walkthrough, and accurate coding-agent disclosure by 19 November 2026, 16:00 Dubai / 17:30 India.

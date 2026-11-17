@@ -1,32 +1,17 @@
 # Documentation map
 
-Status: plan approved and frozen by Hill; implementation in progress, 17 November 2026. No completed application or live evaluations are claimed yet. An installed UI library and static mockup are not a working coach.
+Root documents describe the app and its approved design. This folder contains verification and submission evidence. A planned check is not a passed check.
 
-## Current sources
-
-| Document | Owns |
+| Document | Purpose |
 | --- | --- |
-| [README.md](../README.md) | Project status, submission scope, current tooling; verified application run instructions will replace planning status after implementation. |
-| [ARCHITECTURE.md](../ARCHITECTURE.md) | Request/public/model schemas, provider candidate, prompting, arbitration, limits, module seams and HTTP lifecycle. |
-| [SAFETY.md](../SAFETY.md) | Useful coaching, escalation and boundary behavior, bilingual copy requirements, acceptance matrix and limitations. |
-| [DESIGN.md](../DESIGN.md) | Mascot-free Astryx interface, proposed palette, state transitions, language/RTL and visual/accessibility acceptance. |
-| [PLAN.md](../PLAN.md) | Execution order, exact worker ownership, shared-contract handoff, verification and clean submission. |
+| [Project README](../README.md) | Install/run commands, scope, limitations and coding-agent disclosure. |
+| [Architecture](../ARCHITECTURE.md) | Request/model/public contracts, guardrails, provider settings, arbitration and limits. |
+| [Safety](../SAFETY.md) | Coaching, escalation, boundary behavior and expectations. |
+| [Design](../DESIGN.md) | Astryx components, bilingual presentation and interaction requirements. |
+| [Execution plan](../PLAN.md) | Approved sequence and ownership; historical plan, not a completion claim. |
+| [Evaluation](EVALUATION.md) | Actual offline/live checks, failures, prompt revisions and remaining limitations. |
+| [Scenario fixtures](../tests/fixtures/scenarios.json) | Fictional regression conversations and expected routes. |
+| [Run artifacts](evaluation/) | Dated synthetic requests, validated public responses, timing and mechanical checks. |
+| [Walkthrough](WALKTHROUGH.md) | Recording status and two-minute demonstration outline. |
 
-Root specifications are the approved implementation baseline. Latest user decisions take priority. Changes to shared types/limits are integrated centrally so server, UI and evaluation workers stay aligned.
-
-## Records to create during implementation
-
-These paths are assigned in PLAN.md; the files/results do not exist yet and are not evidence of completed checks.
-
-| Planned path | Contents |
-| --- | --- |
-| `docs/EVALUATION.md` | Actual deterministic and live checks, dated model/settings, latency, failures/reruns, semantic review and known limitations. Separate a mechanical route match from a human assessment of the answer. |
-| `tests/fixtures/scenarios.json` | Synthetic scenarios: 12 families, 16 initial conversations, six high-risk repeats; 22 scenario runs with additional requests in multi-turn cases. |
-| `docs/evaluation/` | Synthetic run artifacts preserving requests/responses, durations and failed observations, with no credentials or real parent data. |
-| `docs/WALKTHROUGH.md` | Approximately two-minute running-app sequence covering everyday help, follow-up, Urdu and crisis; recording link only when it exists. |
-
-Final README must contain checked install/run/test instructions using the reviewer's own server-side process environment, provider-processing disclosure, in-memory history limits, actual recording reference and honest coding-agent use.
-
-## Historical local material
-
-Earlier `mockup.html`, mascot assets, `docs/superpowers/` specifications and `docs/research/` screenshots are preserved locally but excluded from the submission file set. They contain superseded visual directions and fictional examples. They are not current UI targets, live model results or evidence about the production Alpha Kids backend. Current docs do not depend on those files.
+The older standalone mockup, mascot assets, local research and agent scratch reports are excluded from the submission. They are not dependencies or evidence of current live behavior. Evaluation artifacts deliberately contain fictional examples; normal app conversations are not logged.

@@ -1,6 +1,6 @@
 # Safety contract
 
-Status: approved and frozen by Hill · 17 November 2026; implementation started. Read with [ARCHITECTURE.md](ARCHITECTURE.md), [DESIGN.md](DESIGN.md), and [PLAN.md](PLAN.md). No completed application, runtime tests, live model evaluation, or clinical validation is claimed here. This supersedes older local specs/mockups and specifies product behavior, not medical or legal advice.
+Status: approved behavior contract, implemented with evaluation and fixes in progress on 17 November 2026. Read with [ARCHITECTURE.md](ARCHITECTURE.md), [DESIGN.md](DESIGN.md), and [docs/EVALUATION.md](docs/EVALUATION.md). This document specifies intended behavior, not a safety guarantee or medical/legal advice. Clinical validation has not occurred.
 
 ## Scope and useful coaching
 
@@ -23,7 +23,7 @@ Treat each row as an exhaustive valid `kind`/`reason` combination. Reject other 
 | `safeguarding` | `child_abuse`, `domestic_abuse`, `suspected_abuse` | Supportive fixed referral to appropriate local safeguarding support, with conditional emergency instruction. |
 | `unavailable` | `invalid_request`, `too_large`, `limit_reached`, `forbidden_origin`, `busy`, `provider_failure`, `deadline`, `invalid_output`, `review_rejected` | Neutral fixed error, retained visible parent text, explicit retry, edit or reset where applicable. Never expose provider internals or rejected drafts. |
 
-`self_harm_distress` covers current self-harm thoughts/distress without established immediate intent; do not assert imminent danger. `uncertain_current_danger` covers credible present harm cues whose immediacy cannot be established. It gives conditional emergency direction and prompt human support, rather than classifying ambiguity alone as confirmed imminent harm. Ordinary missing context stays `clarify`.
+`self_harm_distress` covers current thoughts/distress where the account explicitly establishes no immediate intent or present danger. Unknown timing or safety stays `uncertain_current_danger`, with prompt human support and conditional emergency direction. Unknown imminence is not evidence of non-imminence. Earlier unresolved imminent danger retains its stronger escalation; a topic change alone does not reduce it. Ordinary missing context stays `clarify`.
 
 Abuse without established immediate danger stays `safeguarding`; disclosed imminent danger overrides it with an urgent response. Historical harm with clearly resolved current danger need not remain urgent forever: use a bounded supportive response, including safeguarding referral where relevant. A quoted or historical disclosure is not automatically harmless; determine who is at risk and whether it describes a current situation.
 
@@ -97,4 +97,4 @@ Keep transcript in browser memory only; reset/refresh clears it. The full bounde
 
 Implementation tasks: (1) shared state/reason schemas and fixed bilingual copy; (2) endpoint validation, A/B arbitration and mocked failure checks; (3) UI language, safe rendering, cancellation and error behavior; (4) live matrix, honest result record and walkthrough. Acceptance is the gates above; no additional safety service/framework is proposed.
 
-Integration decisions are recorded in ARCHITECTURE.md: canonical reason pairs, null boundary candidate without A classification, no B-authored replacement, and neutral unavailable on unparseable assessments or failed review. Gemini gemini-3.5-flash-lite is the provider candidate, subject to access/schema/latency checks. Urdu safety meaning still needs inspection; independent native review is desirable and has not occurred. PLAN.md assigns implementation and verification ownership. Older mascot/palette directions are superseded.
+Integration decisions are recorded in ARCHITECTURE.md: canonical reason pairs, null boundary candidate without A classification, no B-authored replacement, and neutral unavailable on unparseable assessments or failed review. Gemini gemini-3.5-flash-lite is the implemented provider. Actual access/schema/latency observations and failed cases are recorded in docs/EVALUATION.md. Agent inspection of Urdu meaning is not independent native review; that remains unperformed. PLAN.md retains implementation ownership. Older mascot/palette directions are superseded.

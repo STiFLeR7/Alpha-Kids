@@ -1,6 +1,6 @@
 # Parent coach design
 
-Status: approved and frozen by Hill, 17 November 2026; implementation started. Read with [ARCHITECTURE.md](ARCHITECTURE.md), [SAFETY.md](SAFETY.md), and [PLAN.md](PLAN.md). Latest user direction governs: no mascot. White/navy/coral is the accepted visual baseline. This supersedes older mocks/specs; it does not assert a working app or verified model behavior.
+Status: approved design implemented on 17 November 2026; final verification remains in progress. Read with [ARCHITECTURE.md](ARCHITECTURE.md), [SAFETY.md](SAFETY.md), and [docs/EVALUATION.md](docs/EVALUATION.md). No mascot; white/navy/coral. Actual desktop and Urdu mobile screens have been inspected, with focused keyboard/state checks. This does not establish native-language or full assistive-technology acceptance.
 
 ## Experience
 
@@ -31,7 +31,7 @@ Load the required prebuilt reset.css, astryx.css and neutral theme stylesheet on
 
 The inspected landing template uses plain CSSProperties, but includes raw sizes and missing @heroicons/react imports. Replace raw presentation values with theme tokens and remove unused icon imports with the excluded features; do not add an icon dependency just to retain decoration. Generic shell templates can require StyleX compilation: installed StyleX runtime alone does not provide a compiler. Use prebuilt components and avoid new stylex.create source. Next.js client boundaries, stylesheet integration, hydration and selected template imports need a real build smoke check. No compatibility blocker was proven or resolved in this planning task.
 
-For proposed white/navy/coral styling, use the experimental theme editor and imported-theme extension workflow from AGENTS.md, then inspect its generated PNGs. No theme was generated here. Semantic surface/text/action/status/focus tokens must carry the palette; coral text/buttons must pass contrast rather than assume brand color is readable. Build delivery requires `npm run astryx -- doctor --built <actual-output-dir>` plus the framework build; output directory suitability remains to be established by the builder.
+White/navy/coral styling is generated through Astryx's theme editor and imported-theme extension workflow. Editor sources live in themes/parent-coach; application artifacts live in src/themes/parent-coach. Actual desktop/Urdu-mobile app images were inspected, alongside generated showcase images. Semantic theme tokens carry palette and focus styling. Delivery checks use the framework build and `npm run astryx -- doctor --built .` to inspect both source and built output; see docs/EVALUATION.md for warnings and remaining visual/accessibility limits.
 
 ## States and transitions
 

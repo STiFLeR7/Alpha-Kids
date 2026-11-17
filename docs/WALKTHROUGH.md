@@ -1,14 +1,17 @@
-# Approximately two-minute walkthrough
+# Two-minute walkthrough
 
-Prepared script only, 17 November 2026. No recording was made. Capture the actual running local app after integration/provider gates, using fictional examples. Keep secret-manager windows out of capture. Never replace failed answers with canned responses.
+[Watch or download the MP4](walkthrough.mp4) — **120.000 seconds**, H.264, 1280×900, about 2.15 MB. Recorded 17 November 2026 from the production build of code revision `e48652d`, using real Gemini responses and fictional examples.
 
-| Time | Action and narration |
-| --- | --- |
-| 0:00–0:15 | Show adult-parent English/Urdu coach and input disclosure: current-session memory, provider processing, no verified zero-retention promise. |
-| 0:15–0:45 | Select English. Send “My child argues when screen time ends. What small step can I try?” Show actual actions/check-in; follow with “That did not help; the argument happened again.” Show whether context leads to a different action. |
-| 0:45–1:05 | New conversation, confirm clearing, select Urdu. Send the Urdu bedtime first turn from scenarios.json. Show actual Urdu answer and RTL without claiming native validation. |
-| 1:05–1:30 | New conversation, select English. Send “My child is unconscious and is not breathing right now.” Keep actual heading and full human-help direction visible: local emergency services now and nearby trusted support when safe. Explain the app does not contact help. A refusal alone is insufficient; absent direction is a blocker. |
-| 1:30–1:50 | Show verified local run instructions and EVALUATION.md command. State actual integrated check counts and pending gates. Explain A assessment/draft, fixed crisis copy and fresh B review for other outcomes; same-model review is not a guarantee. |
-| 1:50–2:00 | Disclose Astra coordination/review and Sol implementation/testing; mention Hill review only if performed. State probabilistic detection and lack of clinical/native-language validation. |
+The recording uses on-screen chapter cards without spoken narration. It shows:
 
-Allow actual response latency; shorten narration or extend slightly rather than fabricate speed. Keep ordinary/crisis answers legible. Recording and evaluation artifacts intentionally retain fictional examples. Integrator owns the recording, final commands, README/index and final verification record.
+1. Local adult-parent coach, English/Urdu controls and privacy/scope copy.
+2. An ordinary screen-time concern, an actual provider failure, and explicit Retry.
+3. The successful real plan: two practical actions and a check-in.
+4. Reset and a fictional unconscious-child emergency; fixed immediate human-help direction.
+5. Guardrail summary and truthful Astra/Sol coding-agent disclosure.
+
+Only 18.64 seconds of idle welcome-screen footage were removed from the original 138.64-second capture. Response waits were not sped up, errors were retained, and no answer was substituted. Intro, plan, crisis and final-frame samples were inspected for readability.
+
+Urdu behavior is evidenced in the live artifacts and mobile visual checks; the short recording concentrates on the everyday/crisis cases requested in the hiring brief. No native-language or clinical validation is implied.
+
+The [README](../README.md) contains run commands and the [evaluation record](EVALUATION.md) preserves failures and limitations. This MP4 can be shared directly from the repository or uploaded to the owner's preferred video host. No email or third-party video upload has been sent.

@@ -1,6 +1,6 @@
 # Parent coach architecture
 
-Status: approved and frozen by Hill, 2026-11-17; implementation started. No completed application or live model checks are claimed by this document.
+Status: approved baseline implemented, with integration verification in progress on 2026-11-17. Actual results and remaining findings are recorded in [docs/EVALUATION.md](docs/EVALUATION.md).
 Read with [SAFETY.md](SAFETY.md), [DESIGN.md](DESIGN.md), and [PLAN.md](PLAN.md). This supersedes historical specs and mockups. Astra owns integration; Sol 6.1 Medium implements.
 
 ## Scope and evidence
@@ -12,10 +12,9 @@ White/navy/coral is the accepted baseline in the approved plan. Use actual Astry
 English/Urdu/Auto UI: explicit Urdu localizes chrome and sets RTL; Auto has bilingual input cues and English chrome.
 Every message has its own `lang`/direction; render plain text, never model HTML or unchecked streaming.
 
-Observed locally: Astryx core/theme/CLI 0.7.16, React/react-dom 19.3.1, StyleX 0.19.2; no Next app exists.
+Implemented locally: Next 16.4.6, Node 24.11.0, Astryx core/theme/CLI 0.7.16, React/react-dom 19.3.1 and StyleX 0.19.2.
 Core's installed peer ranges are React/react-dom >=19 and StyleX ^0.19.0; those ranges match installed packages.
-This does not establish Next integration/build compatibility. Official [Next installation](https://nextjs.org/docs/app/getting-started/installation)
-requires Node >=20.9 and declares React dependencies; use a maintained Node LTS and pin the selected Next release after peer/build checks.
+Versions are pinned in package.json/package-lock.json. The foundation and UI builds passed; final release verification is tracked separately in the evaluation record.
 
 ## Data flow
 
@@ -39,7 +38,7 @@ public schema -> JSON, no-store -> matching active UI request only
 ## Shared contracts: `lib/contracts.ts`
 
 Use Zod strict objects/discriminated unions, infer TypeScript types, export supported JSON Schema for provider use.
-Sketch below defines the shared shapes; it is not implementation code. Never accept model-only fields from the browser.
+The sketch below summarizes the implemented shared shapes; lib/contracts.ts is authoritative. Never accept model-only fields from the browser.
 
 ```ts
 type Language = 'en' | 'ur';
@@ -177,12 +176,12 @@ Same-model review can repeat the first error; it is a mitigation, never a guaran
 Urgent subtypes distinguish immediate danger from non-imminent self-harm distress/uncertain danger; safeguarding handles abuse.
 No generated phone numbers, country inference from Urdu, diagnosis, treatment/dosing or legal instructions.
 
-## Provider candidate and preflight gate
+## Provider and verification
 
-Candidate: **`gemini-3.5-flash-lite` for both calls**, pinned in server configuration, no automatic failover.
+Implemented: **`gemini-3.5-flash-lite` for both calls**, pinned in lib/gemini.ts, no automatic failover. Current prompts are DRAFT_SYSTEM_V3 and REVIEW_SYSTEM_V3 in lib/coach.ts.
 Integration decision, 2026-11-17: the original 3.8 Flash candidate returned six generation 503s, including a minimal request without schema/settings. 3.7 is documented to redirect to 3.8. Stable 3.5 Flash-Lite passed the exact draft-schema/LOW smoke in 8.7 seconds; review-schema, bilingual behavior and complete latency checks remain mandatory.
 Official [model catalog](https://aistudio.google.com/docs/models) and [model page](https://aistudio.google.com/docs/models/gemini-3.5-flash-lite),
-checked 2026-11-17, list this stable ID and structured-output support. One exact draft-schema/LOW request succeeded on this account; full A/B and semantic acceptance remain open.
+checked 2026-11-17, list this stable ID and structured-output support. Real English/Urdu A+B runs and crisis routes have been exercised; dated results, prompt corrections and residual failures are in docs/EVALUATION.md.
 Use native fetch and nonstreaming [generateContent REST](https://aistudio.google.com/api-reference/generate-content):
 `POST https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:generateContent`,
 `x-goog-api-key` header, `systemInstruction`, `contents`, `generationConfig` with JSON MIME/schema and output limits.
@@ -190,9 +189,8 @@ The reference exposes `responseJsonSchema`; validate the exact supported schema 
 [structured-output guide](https://aistudio.google.com/docs/structured-output). Reject blocked/missing/multiple unexpected candidates,
 non-STOP finish reasons, tool parts, invalid JSON/schema; extract only expected non-thought text.
 
-Proposed budgets: 30 seconds from route entry through final serialization; A <=14s, B <=14s and <=remaining budget minus 1s.
-Start with A `maxOutputTokens: 2048`, B `1024`, and supported low thinking; preflight must establish sufficient
-reasoning/output headroom, especially Urdu. Cap each provider response body at 65,536 bytes before parsing; no automatic retry.
+Implemented budgets: 30 seconds from route entry through final serialization; A <=14s, B <=14s and <=remaining budget minus 1s.
+A uses `maxOutputTokens: 2048`, B `1024`, with LOW thinking. Cap each provider response body at 65,536 bytes before parsing; no automatic retry.
 Do not queue; two active local requests maximum, then 429. Release slots/timers in finally, including cancellation.
 LOW succeeded in the draft-schema smoke. Other thinking settings have not been evaluated.
 These are trial budgets, not latency promises: reasoning may consume output allowance and cause truncation.
@@ -202,7 +200,7 @@ The approved implementation run includes a synthetic live preflight via vault-in
 verify access/quota/billing, exact request/schema/settings, normal EN/UR two-call runs and fixed crisis routing.
 Measure complete A+B latency at shortest and maximum allowed history and review truncation/errors.
 If it cannot reliably fit 30s, revise the budget/model decision explicitly; never skip review to meet a stopwatch.
-Record actual results, dated settings and provider-processing terms; no verified access/quality/zero-retention claim exists yet.
+Observed access and latency do not establish reliability, clinical quality or zero retention. The evaluation record preserves provider errors, one deadline and residual quality issues; actual account billing/retention settings remain unverified.
 
 ## HTTP and UI lifecycle
 
@@ -212,10 +210,11 @@ Use `ok:false` for review_rejected. Error messages are fixed bilingual copy with
 do not label unknown risk as a detected crisis. `retryable` only for busy, provider_failure, deadline or invalid_output.
 No background retry; the parent can explicitly retry, or edit/reset after non-retryable errors.
 Missing/invalid request ID returns null. Preserve a valid parsed request ID; never echo arbitrary strings or raw errors.
-Require JSON and exact expected local Origin/Host (reject missing Origin for browser-only endpoint);
+Require JSON and exact local Origin/Host agreement (reject missing Origin for browser-only endpoint);
+allow Next's loopback URL hostname normalization only when protocol/port match and both URL/Origin hosts are loopback.
 no CORS wildcard. This is browser request validation, not authentication. Bind dev/start to 127.0.0.1.
 
-On Send append visible user text once, clear composer, store active requestId and conversation generation.
+On Send append visible user text once, retain a read-only composer draft, and store active requestId and conversation generation. Clear the draft only on successful completion.
 On failure leave that user turn visible with Retry/Edit and announce the error; never append it twice.
 Edit replaces only the unanswered final user turn. Disable new sends until that turn is retried/edited or reset.
 Cancel aborts fetch and marks the final turn unanswered; reset aborts, increments generation and clears memory.
@@ -236,7 +235,7 @@ Do not persist to local/session storage or log conversation content. Explain ref
    Integrator runs offline checks, synthetic live gate, final accessibility/RTL checks and README/walkthrough integration.
    Parent indexes current documents and excludes superseded local artifacts from the submission.
 
-Proposed commands to wire: `npm run typecheck` (`tsc --noEmit`), `npm test` (Vitest run), `npm run build`,
+Implemented commands: `npm run typecheck` (`tsc --noEmit`), `npm test` (Vitest run), `npm run build`,
 `npm run astryx -- doctor --built .next`; confirm CLI accepts this output path and resolve failures before delivery.
 UI worker follows `npm run astryx -- build`, template/component inspection, layout docs and theme-editor PNG inspection.
 No raw div/span, utility compiler assumptions or hardcoded colors/spacing; theme changes need visual verification.
@@ -245,7 +244,7 @@ Acceptance: strict request/public schemas and limits; precedence/disagreement ma
 timeouts, blocks, malformed/truncated output, busy slot release; failure retry and late-response/reset race;
 English/Urdu/Auto, RTL/mixed text, keyboard/focus/live announcements, mobile layout and plain-text injection rendering.
 Live safety fixtures include everyday, clarification, crisis, abuse, medical/legal, unresolved prior risk, idiom and injection.
-Document what actually passed. No tests, build, accessibility audit or live calls were run for this planning artifact.
+Document actual outcomes in docs/EVALUATION.md; architecture requirements alone are not evidence of a passed check.
 
 Preflight gates: exact Next version/peer build and provider access/terms/latency. Accepted visual baseline: white/navy/coral palette.
 Urdu safety meaning must be inspected; independent native-language review is desirable, not falsely claimed or assumed available.
