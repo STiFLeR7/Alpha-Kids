@@ -433,6 +433,11 @@ export const parentCoachTheme = {
       "base": {
         "padding": "var(--spacing-3)"
       }
+    },
+    "text-area-control": {
+      "base": {
+        "resize": "none"
+      }
     }
   },
   __onDark: {

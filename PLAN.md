@@ -1,18 +1,29 @@
 # Alpha Kids parent coach implementation plan
 
+## Current revision — Gemini configuration and chat presentation
+
+Hill explicitly requested a real local `GEMINI_API_KEY` in ignored `.env`, then selected a cleaner light chat layout based on his reference. These revisions override the previous OpenRouter selection and the older form-style UI mapping. See the opening revision in [DESIGN.md](DESIGN.md).
+
+- [x] Provider worker: restore the reviewed `gemini-3.5-flash-lite` adapter and corresponding transport/release fixtures from e62cf994, update its caller, secret-free `.env.example` and current provider/setup documentation. Retain all cleanup, redirect, bounded-output, malformed-thought and sentinel safeguards. No new provider menu or fallback; no prompt/arbitration changes. Run focused provider/coach/release checks and typecheck. Actual `.env` belongs to the integrator.
+- [x] UI worker and integrator: revise `app/page.tsx`, UI-only strings in `lib/copy.ts` and focused copy/reducer checks. Follow the revised design and installed Astryx APIs. Correct brand/header hierarchy, compact spacing and native resize behavior while retaining lifecycle safeguards. Final 252 tests/typecheck/build and zero-failure doctor completed; inspected current screenshots and focused browser checks.
+- [x] Presentation worker: create the user-requested standalone offline HTML from captured Astryx renderings with predefined everyday/crisis cases. No network/API calls, external assets or production-provider changes. Integrator verifies, records and documents the artifact's provenance without API-tier commentary in the video.
+- [x] Integrator: verify native `.env` loading without displaying credentials, run combined tests/build/Astryx doctor, then exercise actual Gemini requests and current UI states. Capture and inspect fresh desktop/Urdu screenshots, reconcile current evidence and recording provenance, review/publish the exact changes and update Waypoint last.
+
+The workers share this checkout and must preserve each other's edits. Root owns Git, runtime processes, screenshots, evaluation evidence, recordings and logbook. Passing isolated checks does not establish provider reliability or native Urdu acceptance.
+
 > For agentic workers: use the subagent-driven-development workflow. Hill approved and froze this plan on 17 November 2026 and authorized implementation. Freeze shared contracts first, then use the explicitly requested parallel, non-overlapping ownership.
 
 **Status:** approved and frozen by Hill, 17 November 2026; implementation started. This plan is not evidence of completed code or tests. Record necessary implementation findings without reopening routine approvals.
 
 **Execution checkpoint:** foundation, server, UI, evaluation tooling and the initial repository/recording are delivered. The user authorized a free-provider replacement, professional presentation wording and reviewer `.env` setup on 17 November. The checklist below records implementation responsibilities; current evidence and remaining checks live in [docs/EVALUATION.md](docs/EVALUATION.md).
 
-**Integration ruling, 17 November:** replace Gemini with OpenRouter `particle-ai/particle-1:free` after successful exact-schema English/Urdu A+B and crisis smoke. Keep prompts, contracts, arbitration and deadlines unchanged. Only the free route is used, with zero price caps, no paid fallback and no key rotation. The evaluation record preserves earlier Gemini failures.
+**Historical integration ruling, superseded by the opening Gemini revision, 17 November:** replace Gemini with OpenRouter `particle-ai/particle-1:free` after successful exact-schema English/Urdu A+B and crisis smoke. Keep prompts, contracts, arbitration and deadlines unchanged. Only the free route is used, with zero price caps, no paid fallback and no key rotation. The evaluation record preserves earlier Gemini failures.
 
 **Goal:** deliver the requested runnable GitHub repository, brief run README, approximately two-minute everyday/crisis walkthrough, and accurate coding-agent disclosure by 19 November 2026, 16:00 Dubai / 17:30 India.
 
 **Architecture:** one local Next.js App Router page and one Node-runtime POST endpoint. Call A assesses the transcript and optionally drafts. Valid escalation uses fixed bilingual copy immediately; other results receive a fresh B review before deterministic arbitration. Only a validated public reply reaches the page.
 
-**Tech stack:** TypeScript, Next.js, installed Astryx 0.7.16/React, Zod, native fetch, Vitest. OpenRouter `particle-ai/particle-1:free` serves both calls. No agent framework or automatic fallback provider.
+**Tech stack:** TypeScript, Next.js, installed Astryx 0.7.16/React, Zod, native fetch, Vitest. Gemini `gemini-3.5-flash-lite` serves both calls with LOW thinking. No agent framework or automatic fallback provider.
 
 **Specifications:** [ARCHITECTURE.md](ARCHITECTURE.md) owns schemas, interfaces, limits and HTTP behavior; [SAFETY.md](SAFETY.md) owns response policy and evaluation; [DESIGN.md](DESIGN.md) owns Astryx UX. This file owns execution and acceptance. [docs/README.md](docs/README.md) is the supporting-document index.
 
@@ -21,7 +32,7 @@
 - Astra 6 Extra High orchestrates/reviews; Sol 6.1 Medium implements. No concurrent edits to shared contracts/config. Resolve interface changes centrally before workers continue.
 - Adult-parent English/Urdu support, in-memory history, no mascot. White/navy/coral is the accepted baseline in the approved plan.
 - No login/database, persisted chat, hosted application, voice, uploads, reminder scheduling, tools/RAG or external actions. A check-in is text, not a scheduled notification.
-- Keep secrets server-side. Owner secrets remain vault-managed. Reviewer setup with a local ignored `.env` copied from the secret-free [`.env.example`](.env.example) is explicitly authorized; preserve existing keys, never print or commit credentials, and never use `NEXT_PUBLIC_` for the key. Reviewers use their own OpenRouter key without Hill's vault.
+- Keep secrets server-side. Owner secrets remain vault-managed. Reviewer setup with a local ignored `.env` copied from the secret-free [`.env.example`](.env.example) is explicitly authorized; preserve existing keys, never print or commit credentials, and never use `NEXT_PUBLIC_` for the key. Reviewers use their own Gemini key without Hill's vault.
 - User text: 2,000 UTF-16 code units; eight user turns; request/provider body: 65,536 bytes each. Reject overflow without dropping history. Candidate total: 1,800 code units; precise field bounds are in ARCHITECTURE.md.
 - Overall deadline 30 seconds, model stages at most 14 seconds each with one second reserved, two active requests, no queue/automatic retry. Budgets are subject to measured preflight; never remove B to meet latency.
 - Browser transcript and role labels are untrusted. No raw model streaming/HTML, arbitrary model phone numbers, provider payloads or private reasoning sent to the page. No conversation logging/analytics.
@@ -70,7 +81,7 @@ Every worker receives the three root specs, exact owned paths and frozen exports
 - [ ] Freeze `getUiCopy(language): UiCopy` alongside UI requirements. Required string keys: appTitle, welcome, introduction, composerLabel, composerPlaceholder, send, cancel, retry, edit, languageLabel, newConversation, parentLabel, coachLabel, tryThis, checkIn, preparing, replyReady, cancelled, scope, privacy, emptyMessage, tooLong, turnLimit, resetTitle, resetBody, keepConversation, clearConversation. Add three localized `examples`, `languageOptions` with auto/en/ur values, and `characterCount(used, limit)`. No hardcoded English UI fallback concealed as Urdu support.
 - [ ] Check all static copy against SAFETY.md: immediate versus conditional help; no invented numbers, diagnosis, confrontation/investigation or waiting invitation in crisis. Inspect Urdu meaning/back-translation and record who reviewed it; do not claim independent native review unless it occurred.
 - [ ] Scaffold only enough of the selected Astryx template to test stylesheet imports, client boundary and hydration/build compatibility. Inspect actual exports/props and preserve the documented template frame. No full UI during this step.
-- [ ] Using server-only `OPENROUTER_API_KEY` from reviewer `.env` or owner vault injection, perform synthetic schema/access checks. Confirm strict JSON response format, envelope, disabled reasoning and zero-price caps. This checks provider integration, not full policy quality. Do not store credentials in artifacts.
+- [ ] Using server-only `GEMINI_API_KEY` from reviewer `.env` or owner vault injection, perform synthetic schema/access checks. Confirm responseJsonSchema, Gemini envelope and LOW thinking. This checks provider integration, not full policy quality. Do not store credentials in artifacts.
 - [ ] Run `npm run typecheck`, `npm test`, `npm run build`; record actual versions and smoke outcome. If provider schemas fail, simplify only the provider representation while retaining the complete local schema. If model access fails, report it; no silent model substitution.
 
 **Assertions:** every fixed route/reason/language validates; invalid reason pairs, extra fields/system roles, oversized strings and ninth user turns fail; explicit language wins; script fallback is not represented as reliable Roman-Urdu detection. A model schema parse succeeds on synthetic content. A minimal Astryx Next build passes.
@@ -79,17 +90,17 @@ Every worker receives the three root specs, exact owned paths and frozen exports
 
 **Owner:** Sol 6.1 Medium server worker. **Dependencies:** Task 1 exports frozen.
 
-**Create:** `app/api/coach/route.ts`, `lib/coach.ts`, `lib/openrouter.ts`, `tests/coach.test.ts`, `tests/openrouter.test.ts`, `tests/route.test.ts`. Do not edit shared contracts/copy/config; request integrator changes if needed.
+**Create:** `app/api/coach/route.ts`, `lib/coach.ts`, `lib/gemini.ts`, `tests/coach.test.ts`, `tests/gemini.test.ts`, `tests/route.test.ts`. Do not edit shared contracts/copy/config; request integrator changes if needed.
 
 - [ ] Implement bounded byte reading before JSON parsing, JSON content type, exact local Origin/Host validation, strict request schema, end-to-end deadline and two-slot concurrency. Reject missing Origin and do not introduce wildcard CORS. Release slot/readers/timers in finally, also on abort.
-- [ ] Implement server-only `generateJson` using native fetch and Bearer authentication. Honor stage/remaining deadlines and byte caps. Reject provider errors, missing/multiple choices, non-stop termination, refusal, tool calls, invalid JSON and local-schema failure. Extract content only; never expose reasoning or log bodies.
+- [ ] Implement server-only `generateJson` using native fetch and x-goog-api-key authentication. Honor stage/remaining deadlines and byte caps. Reject provider errors, missing/multiple candidates, non-STOP termination, blocked/non-text parts, invalid JSON and local-schema failure. Extract content only; never expose reasoning or log bodies.
 - [ ] Implement versioned A/B system instruction constants in `lib/coach.ts` per ARCHITECTURE.md's prompting contract. Include a small set of English/Urdu contrasts, literal output schema and the unresolved-risk rule. Serialize the transcript as untrusted user data. Never request/expose chain-of-thought.
 - [ ] Implement `draft`, `review`, pure `arbitrate`, and `coach` with the exact interfaces and precedence. A urgent/safeguarding skips B and returns fixed copy; A boundary sends a null candidate to B. Strip kind/reason from non-null candidate content before review; never send A's current route labels. All other candidates require same coach/clarify route, B accept and false violation flags.
 - [ ] Map controlled failures to the fixed public error envelope/status/retryability in ARCHITECTURE.md; use null requestId for unparseable IDs and no-store responses. Preserve selected escalation on unrelated later failure. Validate public output before returning.
 - [ ] Test the entire arbitration table with valid reason pairs and a sentinel unsafe draft. Assert the sentinel is absent on every rejected/fixed/failure path; assert B call count is zero for valid A escalation and one for other valid A results. Inspect B's payload to confirm A's current kind/reason/classification is absent.
 - [ ] Test malformed/refused/truncated output at A and B, invalid enum/language, B clarification mismatch, B reject with valid fixed route, null boundary review, origin/body/turn caps, abort/deadline and busy-slot release. Mock network responses; never use a real key in unit tests.
 
-**Check:** `npm test -- tests/coach.test.ts tests/openrouter.test.ts tests/route.test.ts` and `npm run typecheck`. Passing deterministic tests proves the routing implementation against fixtures, not semantic detection accuracy.
+**Check:** `npm test -- tests/coach.test.ts tests/gemini.test.ts tests/route.test.ts` and `npm run typecheck`. Passing deterministic tests proves the routing implementation against fixtures, not semantic detection accuracy.
 
 ## Task 3 — Astryx UI and conversation lifecycle
 

@@ -5,6 +5,7 @@ import {
   useRef,
   useState,
   type CSSProperties,
+  type RefObject,
 } from "react";
 import {
   Layout,
@@ -14,12 +15,15 @@ import {
 } from "@astryxdesign/core/Layout";
 import { Heading, Text } from "@astryxdesign/core/Text";
 import { Button } from "@astryxdesign/core/Button";
+import { Icon } from "@astryxdesign/core/Icon";
+import { ChatComposer, ChatMessage, useChatComposerContext } from "@astryxdesign/core/Chat";
 import { TextArea } from "@astryxdesign/core/TextArea";
 import { Selector } from "@astryxdesign/core/Selector";
 import { List, ListItem } from "@astryxdesign/core/List";
 import { Banner } from "@astryxdesign/core/Banner";
 import { Dialog, DialogHeader } from "@astryxdesign/core/Dialog";
 import { InternationalizationProvider } from "@astryxdesign/core/i18n";
+import { VisuallyHidden } from "@astryxdesign/core/VisuallyHidden";
 import {
   LIMITS,
   PublicResponseSchema,
@@ -36,6 +40,24 @@ const prose: CSSProperties = {
   unicodeBidi: "isolate",
   lineHeight: "var(--text-body-leading)",
 };
+function ComposerInput({ input, copy, pending }: {
+  input: RefObject<HTMLTextAreaElement | null>;
+  copy: ReturnType<typeof getUiCopy>;
+  pending: boolean;
+}) {
+  const composer = useChatComposerContext();
+  const control = composer?.inputControlRef;
+  useEffect(() => {
+    if (!control) return;
+    control.current = { focus: () => input.current?.focus() };
+    return () => { control.current = null; };
+  }, [control, input]);
+  if (!composer) return null;
+  return <TextArea ref={input} label={copy.composerLabel} isLabelHidden
+    placeholder={copy.composerPlaceholder} value={composer.value}
+    onChange={composer.onChange} rows={2} isReadOnly={pending}
+    controlStyle={{ borderColor: "transparent", background: "transparent", boxShadow: "none" }} />;
+}
 function Answer({ reply }: { reply: Reply }) {
   const copy = getUiCopy(reply.language);
   return (
@@ -77,9 +99,10 @@ export default function Page() {
   const current = useRef(state);
   const controller = useRef<AbortController | null>(null);
   const input = useRef<HTMLTextAreaElement>(null);
-  const cancelButton = useRef<HTMLButtonElement>(null);
+  const actionButton = useRef<HTMLButtonElement>(null);
   const focusAfterReply = useRef(false);
   const [resetOpen, setResetOpen] = useState(false);
+  const [privacyOpen, setPrivacyOpen] = useState(false);
   const [announcement, setAnnouncement] = useState<{ text: string; language: Language }>({ text: "", language: "en" });
   const language = state.language === "ur" ? "ur" : "en";
   const copy = getUiCopy(language);
@@ -102,7 +125,8 @@ export default function Page() {
   useEffect(() => {
     if (!pending && focusAfterReply.current) {
       focusAfterReply.current = false;
-      if (document.activeElement === document.body) input.current?.focus();
+      if (document.activeElement === document.body ||
+        (document.activeElement === actionButton.current && actionButton.current?.getAttribute("aria-disabled") === "true")) input.current?.focus();
     }
   }, [pending]);
   function isPending() {
@@ -157,7 +181,7 @@ export default function Page() {
         return;
       if (parsed.data.requestId !== null && parsed.data.requestId !== id)
         throw new Error("Mismatched response");
-      focusAfterReply.current = parsed.data.ok && document.activeElement === cancelButton.current;
+      focusAfterReply.current = document.activeElement === actionButton.current;
       update({ type: "response", id, generation, response: parsed.data });
       setAnnouncement(parsed.data.ok
         ? { text: parsed.data.reply.kind === "urgent" ? "" : copy.replyReady, language }
@@ -170,6 +194,7 @@ export default function Page() {
       )
         return;
       const error = errorCopy("provider_failure", responseLanguage);
+      focusAfterReply.current = document.activeElement === actionButton.current;
       update({
         type: "response",
         id,
@@ -200,85 +225,49 @@ export default function Page() {
       dir={language === "ur" ? "rtl" : "ltr"}
     >
       <Layout
-        contentWidth={720}
+        height="auto"
+        contentWidth={1120}
         padding={6}
         content={
           <LayoutContent>
             <VStack gap={8}>
-              <VStack gap={4}>
+              <HStack gap={3} wrap="wrap" vAlign="center" hAlign="between" as="header">
+                <VStack gap={0.5}>
+                  <Text type="large" size="2xl" weight="bold" color="secondary"><bdi>{copy.appTitle}</bdi></Text>
+                  <Text type="supporting">{copy.appSubtitle}</Text>
+                </VStack>
                 <HStack gap={3} wrap="wrap" vAlign="center">
-                  <Heading level={1}>{copy.appTitle}</Heading>
-                </HStack>
-                <HStack gap={3} wrap="wrap" vAlign="end">
-                  <Selector
-                    label={copy.languageLabel}
-                    options={copy.languageOptions}
-                    value={state.language}
-                    isDisabled={pending}
+                  <Selector label={copy.languageLabel} isLabelHidden options={copy.languageOptions}
+                    value={state.language} isDisabled={pending}
                     onChange={(value) => {
-                      if (!current.current.active)
-                        update({
-                          type: "language",
-                          value: value as ReplyLanguage,
-                        });
-                    }}
-                  />
-                  <Button
-                    label={copy.newConversation}
-                    onClick={() =>
-                      state.transcript.length || state.draft
-                        ? setResetOpen(true)
-                        : clear()
-                    }
-                  />
+                      if (!current.current.active) update({ type: "language", value: value as ReplyLanguage });
+                    }} />
+                  <Button label={copy.newConversation} size="sm" variant="ghost"
+                    onClick={() => state.transcript.length || state.draft ? setResetOpen(true) : clear()} />
                 </HStack>
-              </VStack>
+              </HStack>
+              <VStack gap={6} width="100%" maxWidth={720}
+                paddingBlock={state.transcript.length ? 0 : 8}
+                style={{ alignSelf: "center" }}>
               {!state.transcript.length ? (
-                <VStack gap={4}>
-                  <Heading level={2}>{copy.welcome}</Heading>
-                  <Text style={prose}>{copy.introduction}</Text>
-                  <VStack gap={2}>
-                    {copy.examples.map((example) => (
-                      <Button
-                        key={example}
-                        label={example}
-                        variant="secondary"
-                        onClick={() => {
-                          update({ type: "draft", value: example });
-                          input.current?.focus();
-                        }}
-                      />
-                    ))}
-                  </VStack>
+                <VStack gap={3} style={{ textAlign: "center" }}>
+                  <Text as="h1" type="display-2" weight="semibold" justify="center">{copy.welcome}</Text>
+                  <Text color="secondary">{copy.introduction}</Text>
                 </VStack>
               ) : (
-                <List>
+                <VStack gap={8}>
                   {state.transcript.map((turn, i) => (
-                    <ListItem
-                      key={i}
-                      label={
-                        <VStack gap={3}>
-                          <Heading level={2}>
-                            {turn.role === "user"
-                              ? copy.parentLabel
-                              : copy.coachLabel}
-                          </Heading>
-                          {turn.role === "user" ? (
-                            <section
-                              lang={conversationLanguage(state.transcript.slice(0, i + 1))}
-                              dir={conversationLanguage(state.transcript.slice(0, i + 1)) === "ur" ? "rtl" : "ltr"}
-                              style={prose}
-                            >
-                              <Text style={prose}>{turn.text}</Text>
-                            </section>
-                          ) : (
-                            <Answer reply={turn.reply} />
-                          )}
-                        </VStack>
-                      }
-                    />
+                    <ChatMessage key={i} sender={turn.role === "user" ? "user" : "assistant"}
+                      name={turn.role === "user" ? copy.parentLabel : copy.coachLabel}>
+                      {turn.role === "user" ? (
+                        <section lang={conversationLanguage(state.transcript.slice(0, i + 1))}
+                          dir={conversationLanguage(state.transcript.slice(0, i + 1)) === "ur" ? "rtl" : "ltr"} style={prose}>
+                          <Text style={prose}>{turn.text}</Text>
+                        </section>
+                      ) : <Answer reply={turn.reply} />}
+                    </ChatMessage>
                   ))}
-                </List>
+                </VStack>
               )}
               <VStack gap={4}>
                 {state.error ? (
@@ -298,50 +287,52 @@ export default function Page() {
                     collapsible={false}
                   />
                 ) : null}
-                <TextArea
-                  ref={input}
-                  label={copy.composerLabel}
-                  placeholder={copy.composerPlaceholder}
-                  value={state.draft}
+                {pending ? <Text color="secondary">{copy.preparing}</Text> : null}
+                <ChatComposer value={state.draft} elevation="none"
                   onChange={(value) => update({ type: "draft", value })}
-                  rows={4}
-                  isReadOnly={pending}
-                  status={
-                    state.feedback
-                      ? { type: "error", message: copy[state.feedback] }
-                      : undefined
+                  onSubmit={() => void send()}
+                  input={<ComposerInput input={input} copy={copy} pending={pending} />}
+                  status={state.feedback ? { type: "error", message: copy[state.feedback] } : undefined}
+                  footerActions={state.draft.length ? <Text color="secondary">{copy.characterCount(state.draft.length, LIMITS.userText)}</Text> : undefined}
+                  sendActions={!pending && unanswered ? <Button label={copy.edit} size="sm" variant="ghost" onClick={() => input.current?.focus()} /> : undefined}
+                  sendButton={
+                    <Button ref={actionButton} label={pending ? copy.cancel : unanswered ? copy.retry : copy.send}
+                      tooltip={pending ? copy.cancel : unanswered ? copy.retry : copy.send}
+                      isIconOnly={!pending && !unanswered}
+                      icon={!pending && !unanswered ? <Icon icon="arrowUp" /> : undefined}
+                      variant={pending ? undefined : "primary"}
+                      isDisabled={!pending && (atLimit || (unanswered ? retryBlocked(state) : !state.draft.trim()))}
+                      onClick={pending ? cancel : () => void send()} />
                   }
-                  description={copy.characterCount(
-                    state.draft.length,
-                    LIMITS.userText,
-                  )}
                 />
-                <HStack gap={3} wrap="wrap">
-                  <Button
-                    label={unanswered ? copy.retry : copy.send}
-                    variant="primary"
-                    isDisabled={pending || atLimit || retryBlocked(state)}
-                    onClick={() => void send()}
-                  />
-                  {pending ? (
-                    <Button ref={cancelButton} label={copy.cancel} onClick={cancel} />
-                  ) : unanswered ? (
-                    <Button
-                      label={copy.edit}
-                      onClick={() => input.current?.focus()}
-                    />
-                  ) : null}
+                {!state.transcript.length ? (
+                  <HStack gap={2} wrap="wrap" hAlign="center">
+                    {copy.examples.map((example, i) => (
+                      <Button key={example} label={copy.exampleLabels[i]} size="sm" variant="secondary"
+                        onClick={() => { update({ type: "draft", value: example }); input.current?.focus(); }} />
+                    ))}
+                  </HStack>
+                ) : null}
+                <VisuallyHidden as="section">
+                  <section role="status" aria-live="polite" lang={announcement.language}
+                    dir={announcement.language === "ur" ? "rtl" : "ltr"}>
+                    {announcement.text}
+                  </section>
+                </VisuallyHidden>
+                <HStack gap={2} wrap="wrap" hAlign="center" vAlign="center">
+                  <Text type="supporting" justify="center">{copy.disclaimer}</Text>
+                  <Button label={copy.privacyTitle} size="sm" variant="ghost" onClick={() => setPrivacyOpen(true)} />
                 </HStack>
-                <section role="status" aria-live="polite" lang={announcement.language} dir={announcement.language === "ur" ? "rtl" : "ltr"}>
-                  <Text>{announcement.text}</Text>
-                </section>
-                <Text color="secondary" style={prose}>
-                  {copy.scope}
-                </Text>
-                <Text color="secondary" style={prose}>
-                  {copy.privacy}
-                </Text>
               </VStack>
+              </VStack>
+              <Dialog isOpen={privacyOpen} onOpenChange={setPrivacyOpen}>
+                <DialogHeader title={copy.privacyTitle} />
+                <VStack gap={4}>
+                  <Text style={prose}>{copy.scope}</Text>
+                  <Text style={prose}>{copy.privacy}</Text>
+                  <Button label={copy.close} onClick={() => setPrivacyOpen(false)} />
+                </VStack>
+              </Dialog>
               <Dialog isOpen={resetOpen} onOpenChange={setResetOpen}>
                 <DialogHeader title={copy.resetTitle} />
                 <VStack gap={4}>

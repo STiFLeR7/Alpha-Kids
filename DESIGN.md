@@ -1,5 +1,29 @@
 # Parent coach design
 
+## Chat layout revision — 17 November 2026
+
+Hill requested a tidier chat experience using the supplied reference and explicitly selected **light palette, cleaner chat layout**. This revision supersedes the earlier form-style composer, full-width stacked examples and always-visible disclosure paragraphs. Existing safety, language, retry, cancellation and reset behavior remains required.
+
+Use the reference's quiet header, centered empty-state greeting, dominant composer, restrained suggestions and generous space. Keep the white/navy/coral theme. The compact header contains Alpha Kids / Parent coach, language selector and New conversation. In the empty state, center a short greeting over the composer and place three compact, wrapping topic suggestions below. Suggestions fill and focus the draft without sending. After the first message, hide the greeting/suggestions, show clearly spaced parent/coach turns and place the composer below the transcript. Keep mobile scrolling natural without a fixed overlay over the keyboard.
+
+Use the installed Astryx `ai-chat-landing` composition and `ChatComposer` shell. A controlled TextArea inside that shell preserves Enter-as-newline, UTF-16 validation, pending read-only state and focus behavior; connect it through the documented composer context for body-click focus. Read component APIs before implementing. Following Hill's subsequent header/brand feedback, use an outer 1120-wide frame and a centered chat column up to 720, with padding 6 and overall gap 8. The wider header has a distinct Alpha Kids wordmark and a smaller localized Parent coach subtitle; controls align at the opposite edge. The wordmark remains Alpha Kids in Urdu. Use existing Button, Selector, Layout, Text, VisuallyHidden, Dialog and Banner components and theme tokens. One Button stays mounted across Send/Cancel/Retry, using isIconOnly for the send arrow so keyboard focus survives the transition. Do not add dependencies, a contenteditable editor, fake sidebar/history, decorative orb, attachments, voice or model selectors.
+
+Below the composer, show **“AI can make mistakes. Use your judgment.”** with a corresponding Urdu sentence. One line where it fits; natural wrapping on narrow screens/zoom, never clipping. A small **Privacy & limits** control opens an accessible dialog with the existing scope/privacy details, available before sending. Crisis, safeguarding, boundary and error content remains fully visible. Keep live announcements without an empty visual paragraph; show pending status during a request.
+
+Approach: retain the approved light palette and improve hierarchy through actual Astryx chat components. A dark restyle was offered and not selected. A finance dashboard adds unrelated controls; shortening the old footer alone leaves the form-style interaction unresolved.
+
+Acceptance: inspect actual desktop and 390-wide Urdu screenshots; verify wrapping/no horizontal scrolling, example fill/focus, newline entry, send/cancel/retry/reset safeguards, privacy dialog naming/focus return and fully visible urgent support. Build/doctor and reducer/copy checks supplement those observations; they do not establish full accessibility or native-language review.
+
+### Visual audit and implemented corrections
+
+- Brand: the slash-separated page label competed with the controls. It is now a distinct wordmark/subtitle, outside the chat's narrow reading column.
+- Hierarchy: the earlier greeting lacked emphasis; the first refinement then added too much vertical empty space. The final layout groups a centered display heading, brief language cue and dominant composer below the header with bounded spacing, without forced viewport height.
+- Composer: the form label, bilingual placeholder and separate Send row added visual clutter. The field keeps its accessible label, uses a short localized placeholder and places an accessible send-arrow action inside Astryx's composer. Two visible text rows keep it compact. Native resizing is disabled through the theme editor's `resize: none` setting on `text-area-control`, confirmed in the rendered browser. Empty sends are disabled; Retry and Cancel retain explicit text.
+- Footer: two long paragraphs became one short sentence and a Privacy & limits dialog. Critical response content remains inline and fully visible.
+- Responsive behavior: inspected 1440-wide desktop, 390-wide English/Urdu and 320-wide Urdu. Checked RTL document metadata, overflow, example focus/newline, privacy dialog name/Escape/focus return, cancellation, non-retryable errors and reset. These are focused browser observations, not a full assistive-technology audit.
+
+Hill subsequently requested a standalone HTML recording with no model calls and no API-tier commentary in the video. That presentation artifact reuses the actual rendered Astryx interface with predefined scenarios. The application keeps its live Gemini integration. The recording is an interface walkthrough; separate evaluation evidence records actual provider behavior.
+
 Status: approved design implemented on 17 November 2026; final verification remains in progress. Read with [ARCHITECTURE.md](ARCHITECTURE.md), [SAFETY.md](SAFETY.md), and [docs/EVALUATION.md](docs/EVALUATION.md). No mascot; white/navy/coral. Actual desktop and Urdu mobile screens have been inspected, with focused keyboard/state checks. This does not establish native-language or full assistive-technology acceptance.
 
 ## Experience

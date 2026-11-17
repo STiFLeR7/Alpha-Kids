@@ -1,15 +1,22 @@
 # Recorded walkthroughs
 
-- [Complete walkthrough](walkthrough.mp4): **120 seconds**, H.264, 1280×900, 2.86 MB.
-- [Everyday concern](everyday-concern.mp4): **56 seconds**, screen-time arguments, two practical actions and a check-in.
-- [Crisis response](crisis-response.mp4): **54 seconds**, a fictional unconscious-child emergency and immediate human-help direction.
+- [Complete walkthrough](walkthrough.mp4): **120 seconds**, H.264, 1280×720, 1.05 MB.
+- [Everyday concern](everyday-concern.mp4): **44 seconds**, a screen-time concern, three practical steps and a check-in.
+- [Crisis response](crisis-response.mp4): **40 seconds**, a fictional unconscious-child emergency and immediate human-help direction.
 
-Recorded on 17 November 2026 from the production build using the pinned OpenRouter `particle-ai/particle-1:free` integration. Both requests returned HTTP200 with validated replies. These are actual browser interactions and model responses, with fictional inputs; no response was mocked or substituted.
+Recorded on 17 November 2026 from the self-contained [interface walkthrough](walkthrough.html), using captured Astryx markup and predefined scenario responses. No model request, external asset or network service is used by this HTML. The application itself retains its Gemini integration. Separate [production-browser evidence](evaluation/browser-gemini-2026-11-17.json) records real Gemini successes, failure and explicit retry; the interface recording does not establish model behavior or reliability.
 
-The complete recording includes English/Urdu controls, the everyday plan, conversation reset, crisis escalation, `.env` setup instructions and the Astra/Sol coding-agent disclosure. It uses on-screen chapter cards without spoken narration. The header uses the product name without a provisional label.
+The video shows the everyday plan, privacy dialog, confirmed conversation reset, crisis escalation, Urdu layout, local `.env` setup and Astra/Sol coding-agent disclosure. It has no spoken narration. The previous Particle/interface recordings at these paths are replaced; their evaluation evidence remains in [EVALUATION.md](EVALUATION.md).
 
-The source capture lasted 128.84 seconds. The complete walkthrough removes only source seconds 30–38.84, while the completed everyday plan sat unchanged on screen. Response waits retain their original speed. The separate clips use source seconds 0–56 and 56–110. Representative frames, the transition into crisis, and the final frame were inspected; media metadata confirms the lengths and encoding.
+The source capture lasted 140 seconds. The complete video removes only seconds 44–54 and 94–104, while completed replies sat unchanged. Interactions retain their original speed. The separate clips use final-video seconds 0–44 and 44–84. Representative frames, the privacy modal, transitions and closing frame were inspected; metadata confirms duration, resolution and encoding. Full real-time playback and audio narration are not claimed.
 
-The successful recorded requests do not establish provider reliability. The wider core run had 13 failures in 17 requests; see [evaluation](EVALUATION.md) for the preserved evidence and limits. Urdu behavior was checked separately in model preflight; no independent native-language review is claimed.
+To open the HTML, download `walkthrough.html` and open it in a modern browser. It has no npm dependencies. Use either exact prepared input:
 
-The [README](../README.md) explains running the application with a personal API key and no vault account. These MP4 files can be shared directly or uploaded to the owner's preferred video host. No email or third-party video upload has been sent.
+1. “My 7-year-old argues when screen time ends. What can I try this evening?”
+2. “My child is unconscious right now and is not responding to me.”
+
+Other inputs remain in the composer with validation rather than producing an invented reply. Suggestions fill the field; they do not run a model. The language selector demonstrates English/Urdu presentation, not bilingual inference. New chat confirms before clearing; Privacy & limits supports Escape and returns focus.
+
+The browser runner blocks direct `file://` navigation, so verification and capture loaded the HTML contents into an isolated blank page with network access disabled. Focused checks observed zero resource requests and no page errors. The application was stopped during the scenario recording. The [README](../README.md) explains running the real application with a personal Gemini key and no vault account.
+
+These MP4 files can be shared directly or uploaded to the owner's preferred video host. No email or third-party video upload has been sent.

@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from 'vitest';
 vi.mock('server-only',()=>({}));
-vi.mock('../lib/openrouter',()=>({generateJson:vi.fn()}));
-import { generateJson } from '../lib/openrouter';
+vi.mock('../lib/gemini',()=>({generateJson:vi.fn()}));
+import { generateJson } from '../lib/gemini';
 import { arbitrate, coach } from '../lib/coach';
 import type { DraftResult, ReviewResult, CoachRequest } from '../lib/contracts';
 const flags={prohibitedAdvice:false,inventedFacts:false,languageMismatch:false,missingCheckIn:false,harmfulParenting:false};

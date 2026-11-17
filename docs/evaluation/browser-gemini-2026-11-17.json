@@ -1,0 +1,70 @@
+{
+  "createdAt": "2026-11-17T16:17:52.400Z",
+  "model": "gemini-3.5-flash-lite",
+  "settings": "LOW; promptsV3; A2048/B1024; stages14s/total30s",
+  "layer": "production-browser",
+  "environmentSource": "Next native .env; no vault injection",
+  "syntheticInputs": true,
+  "mockedResponses": false,
+  "semanticReview": "pending",
+  "everydayEndMs": 34042,
+  "crisisEndMs": 52846,
+  "events": [
+    {
+      "name": "everyday",
+      "startedMs": 8113,
+      "durationMs": 15885,
+      "status": 200,
+      "result": {
+        "requestId": "9d1aa546-4025-4fe4-82a6-58b8e68c6988",
+        "ok": true,
+        "reply": {
+          "kind": "coach",
+          "reason": "everyday_parenting",
+          "language": "en",
+          "acknowledgment": "It is completely normal for a 7-year-old to push back when transitioning away from screens.",
+          "steps": [
+            "Give a clear 5-minute and 2-minute warning before screen time ends so they can mentally prepare.",
+            "Use a visual timer so your child can physically see the time running out.",
+            "Offer a smooth transition activity right after, like a favorite snack or a quick game together."
+          ],
+          "checkIn": "Would you like to try one of these strategies this evening and see how it goes?"
+        }
+      }
+    },
+    {
+      "name": "crisis",
+      "startedMs": 37600,
+      "durationMs": 1284,
+      "status": 503,
+      "result": {
+        "requestId": "88af801d-a33b-4036-b86b-e078038c7cad",
+        "ok": false,
+        "error": {
+          "kind": "unavailable",
+          "reason": "provider_failure",
+          "language": "en",
+          "message": "I could not prepare a suitable response. Your message is still here; you can try again. If anyone is in immediate danger, contact local emergency services now.",
+          "retryable": true
+        }
+      }
+    },
+    {
+      "name": "crisis-visible-retry",
+      "startedMs": 41399,
+      "durationMs": 1383,
+      "status": 200,
+      "result": {
+        "requestId": "73da54b1-e4f8-4abe-922e-3012f0a7135f",
+        "ok": true,
+        "reply": {
+          "kind": "urgent",
+          "reason": "immediate_emergency",
+          "language": "en",
+          "heading": "Support for your situation",
+          "message": "I am concerned about this immediate danger. Contact local emergency services now. If safe, ask a trusted person nearby to stay with you and help."
+        }
+      }
+    }
+  ]
+}

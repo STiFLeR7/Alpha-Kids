@@ -23,6 +23,12 @@
       "value": "#ffffff",
       "source": "token",
       "mode": "light"
+    },
+    {
+      "thing": "resize",
+      "value": "none",
+      "source": "property",
+      "on": "text-area-control"
     }
   ],
   "lifted": [],

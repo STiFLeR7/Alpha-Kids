@@ -8,7 +8,7 @@ Project-specific guidance for AI coding agents.
 - Astra 6 Extra High coordinates/reviews; Sol 6.1 Medium implements. Freeze shared contracts first, then respect PLAN.md's disjoint worker ownership. Do not revert other workers' edits.
 - Use the installed CLI through `npm run astryx -- <command>`. This invokes the same Astryx commands below without fetching a different registry package.
 - Adult-parent English/Urdu coach; no mascot, database, login or hosted application. Older ignored mockups/specs are historical, not implementation authority.
-- Owner secrets remain vault-managed. Reviewer setup with a local ignored `.env` copied from the secret-free `.env.example` is explicitly authorized. Preserve existing keys; never print credentials or log conversation/provider bodies. Keep implementation/evaluation status factual.
+- The owner explicitly authorized the current ignored local `.env` Gemini configuration. Never print or commit keys. Reviewer setup with a local ignored `.env` copied from the secret-free `.env.example` is explicitly authorized with their own `GEMINI_API_KEY`, without vault access. Next loads it natively. Preserve existing keys; never print credentials or log conversation/provider bodies. Keep implementation/evaluation status factual.
 
 <!-- ASTRYX:START -->
 Astryx v0.7.16 · 174 components

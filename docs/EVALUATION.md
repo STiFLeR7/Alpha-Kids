@@ -4,23 +4,43 @@ Dated **17 November 2026**. This is a small developer regression exercise, not s
 
 ## Reproduce
 
-Use Node 24, `npm ci`, and copy `.env.example` to ignored `.env` with your own `OPENROUTER_API_KEY`. Run `npm run dev`. Vault is optional. In another terminal:
+Use Node 24, `npm ci`, and copy `.env.example` to ignored `.env` with your own `GEMINI_API_KEY`. Run `npm run dev`. No vault is needed. In another terminal:
 
 ```sh
 npm test
 npm run typecheck
 npm run build
 npm run astryx -- doctor --built .
-npm run eval -- --settings-ref "OpenRouter particle-ai/particle-1:free; reasoning disabled; strict JSON; price caps 0; A2048/B1024; promptsV3; 14s/30s"
+npm run eval -- --settings-ref "Gemini gemini-3.5-flash-lite; LOW; A2048/B1024; promptsV3; 14s/30s"
 ```
 
 The current fixture contains **26 scenarios / 32 planned requests**: the original 22 scenarios / 26 requests plus four explicit repeats of uncertain danger and retained imminent risk, added after observed failures. Twelve behavior families cover normal English/Urdu, follow-up, clarification, emergency, abuse, distress, mixed language, retained danger, idiom/history, medical/legal boundaries and injection.
 
 The sequential runner validates real responses, sends exact loopback Origin, chains actual prior replies, stops a scenario on failure, and preserves every run under a fresh UUID. It never retries automatically. Exit zero means mechanical checks only. Artifacts intentionally store fictional inputs and public outputs; normal app conversations are not logged. Headers, credentials and raw malformed/provider bodies are omitted.
 
-## Current revision: OpenRouter and reviewer configuration
+## Current revision: Gemini and local configuration
 
-On 17 November the user requested another free model and configuration without vault access. The application now pins `particle-ai/particle-1:free`, with strict JSON output, disabled reasoning, unchanged v3 policy, no fallback/retries, and zero prompt/completion/request price caps. The owner used an existing vault credential; reviewers supply their own key in `.env`.
+The user requested restoration of `gemini-3.5-flash-lite` and explicitly authorized the real local `GEMINI_API_KEY` in ignored `.env`. The key was sourced through vault injection, written without displaying it, and verified against Next's native loader. The tracked `.env.example` contains only an empty key assignment; reviewers provide their own key. The provider adapter retains the previously reviewed bounds, cleanup, redirects and malformed-thought checks. Prompts v3, contracts and arbitration are unchanged.
+
+[Direct-module configuration smoke](evaluation/gemini-env-smoke-1794931245241.json), using the current coach module and Next-loaded `.env` without vault injection: English everyday returned provider HTTP503 in 2.2 seconds; Urdu everyday reached the 14-second stage deadline; immediate physical crisis returned HTTP200 and the expected fixed urgent reply in 9.2 seconds. The successful crisis call establishes that this configured key can make a generation request. The two failed calls leave availability unresolved. This is not an HTTP-route or browser acceptance test, and no raw provider text or key was saved.
+
+Combined verification passed: **252 tests in 9 files**, typecheck and the latest production build. Astryx doctor reported **21 pass, 0 fail, 2 warnings** (the existing CLI PATH warning and inline-style/source-scan findings, including the ignored historical copy).
+
+Inspected the revised 1440-wide desktop, 390-wide English/Urdu and 320-wide Urdu screens. Focused browser checks passed for no horizontal overflow, stable branding in Urdu, lang/dir, named privacy dialog/Escape/opener focus, suggestions filling/focusing the draft, native Enter newline, pending read-only state, cancellation retaining text/focus, late-response suppression, non-retryable failure handling, Urdu status metadata and confirmed reset. The lifecycle probes used explicit synthetic response fixtures and made no provider requests. [Screenshots](screenshots/) show the actual empty states, without mocked conversation content.
+
+Preview screenshots repeatedly timed out after 15000ms; after two failures at the same capture step, Playwright was used for the inspected images and checks. Browser console inspection found only a missing favicon request; no hydration error was observed. Native screen-reader output, physical keyboard clearance and independent Urdu wording remain unchecked.
+
+[Production-browser evidence](evaluation/browser-gemini-2026-11-17.json) subsequently recorded an everyday plan/check-in in 15.9 seconds, a crisis HTTP503, then an explicit visible retry that returned the expected urgent reply in 1.4 seconds. The app used its native-loaded `.env`; these were real calls. Both failures and successes are preserved. They do not establish reliable service. The user later chose a separate offline HTML interface recording; that presentation is not provider evidence.
+
+After additional visual feedback, removed forced viewport-height whitespace, reduced the composer to two rows and disabled native resizing through the Astryx theme editor. Generated theme pictures were inspected, and actual browser computed style confirmed `resize: none`. Final compact desktop/English-mobile/Urdu-mobile images were refreshed; Urdu still fits 320 CSS pixels. Focused controlled-error and transport-error probes confirmed focus remains on the Retry control or returns to the composer. An initial probe incorrectly required the composer even when the reused button retained focus; its corrected assertion checks for no lost focus. The final source again passed 252 tests/typecheck/build and doctor with zero failures.
+
+The final bounded review found an initial Send-to-Cancel keyboard-focus loss. Reproduced it in the production browser, then kept one Astryx Button mounted across Send/Cancel/Retry. Completion returns focus to the input when the action becomes disabled, while preserving a focused Retry or another live control. A fresh probe passed success, public error, transport error and deliberate focus movement without manually focusing Cancel. These probes intercepted `/api/coach` and made zero provider calls. After this fix, 252 tests, typecheck, build and Astryx doctor (21 pass, 2 warnings, 0 failures) passed again.
+
+The standalone HTML passed focused browser checks in an offline browser context: everyday plan/check-in, fixed crisis response, input validation, suggestions, newline, reset confirmation, privacy/Escape/focus, language selection and 320-pixel Urdu reflow. Captured closed-dialog styling initially hid the native modal; the HTML now explicitly displays open dialogs. The final exercise observed zero network requests, zero resource loads and zero page errors. The browser runner blocks `file://`, so the file contents were loaded directly into an isolated blank page. These checks validate the presentation, not model inference or risk classification.
+
+## Historical revision: OpenRouter and reviewer configuration
+
+Earlier on 17 November the user requested another free model and configuration without vault access. That revision pinned `particle-ai/particle-1:free`, with strict JSON output, disabled reasoning, unchanged v3 policy, no fallback/retries, and zero prompt/completion/request price caps. The owner used an existing vault credential; reviewers supplied their own key in `.env`.
 
 - **261 tests in 9 files**, typecheck and production build passed. An ignored historical verification copy initially inflated worker counts to 507; Vitest now includes only `tests/**/*.test.ts`. No historical-copy tests are counted in 261.
 - `.env.example` contains an empty server-only key. Local `.env` variants are ignored; the example is eligible for tracking. Next's native loader was verified with an isolated fictional key. No real credential was copied into a file.
@@ -46,7 +66,7 @@ Screen-reader audio, physical mobile-keyboard clearance, true zoom/reflow and in
 
 ## Earlier Gemini model settings and revision history
 
-The earlier implementation used **Gemini `gemini-3.5-flash-lite`** with REST `generateContent`, structured JSON Schema, LOW thinking, draft/review output caps 2048/1024, 14-second stages and a 30-second request deadline. These historical observations do not establish acceptance of the new model.
+The earlier implementation used **Gemini `gemini-3.5-flash-lite`** with REST `generateContent`, structured JSON Schema, LOW thinking, draft/review output caps 2048/1024, 14-second stages and a 30-second request deadline. Those are also the restored settings. Historical observations remain useful but do not establish current service availability or acceptance of the revised interface.
 
 The initial 3.8 Flash candidate returned six generation 503s, including a minimal request. 3.5 Flash-Lite then accepted the exact draft schema in 8.7 seconds; subsequent real coaching responses exercised both draft and review schemas. A separate three-case diagnostic observed five provider HTTP 200 responses. It did not reproduce or establish the cause of intermittent failures.
 
@@ -78,6 +98,6 @@ A [maximum-history probe](evaluation/max-history-1794925750664.json) used eight 
 
 ## Processing and limitations
 
-The app has no persistent transcript, analytics or conversation logs. Evaluation JSON and recordings intentionally retain fictional examples. Current requests pass through OpenRouter to Particle AI under their [processing policies](https://openrouter.ai/docs/guides/privacy/provider-logging); account privacy settings remain unverified. Earlier Gemini runs used Google's service. No provider zero-retention claim is made.
+The app has no persistent transcript, analytics or conversation logs. Evaluation JSON and recordings intentionally retain fictional examples. Current requests use Google's Gemini API; the historical Particle run used OpenRouter. Provider processing and account privacy settings remain unverified. No provider zero-retention claim is made.
 
 Same-model reviews can share mistakes. The client supplies history and can omit/forge/reset it; there is no trusted risk ledger. No location-specific numbers, clinical validation, guaranteed crisis detection or automatic human intervention are claimed.
