@@ -4,10 +4,22 @@ import { errorCopy } from "../lib/copy";
 const send = (s = initialChat, id = "one") =>
   chatReducer({ ...s, draft: "Bedtime" }, { type: "send", id });
 describe("conversation lifecycle", () => {
+  it("blocks unchanged non-retryable failures while allowing an edited replacement", () => {
+    const pending = send();
+    const failed = chatReducer(pending, { type: "response", id: "one", generation: 0,
+      response: { ok: false, requestId: "one", error: errorCopy("review_rejected", "en") } });
+    expect(chatReducer(failed, { type: "send", id: "two" })).toBe(failed);
+    const edited = chatReducer(failed, { type: "draft", value: "Different bedtime concern" });
+    const retry = chatReducer(edited, { type: "send", id: "two" });
+    expect(retry.active?.id).toBe("two");
+    expect(retry.transcript).toEqual([{ role: "user", text: edited.draft }]);
+  });
   it("blocks duplicate send and retains one unanswered turn through cancel/edit/retry", () => {
     const pending = send();
     expect(chatReducer(pending, { type: "send", id: "two" })).toBe(pending);
     const cancelled = chatReducer(pending, { type: "cancel" });
+    expect(cancelled.draft).toBe(pending.draft);
+    expect(cancelled.generation).toBe(pending.generation + 1);
     const edited = chatReducer(cancelled, {
       type: "draft",
       value: "New bedtime",
@@ -31,6 +43,11 @@ describe("conversation lifecycle", () => {
       }).error,
     ).toEqual(response.error);
     const reset = chatReducer(pending, { type: "reset" });
+    expect(reset.transcript).toEqual([]);
+    expect(reset.draft).toBe("");
+    expect(reset.generation).toBe(pending.generation + 1);
+    const replacement = chatReducer(chatReducer(pending, { type: "cancel" }), { type: "send", id: "replacement" });
+    expect(chatReducer(replacement, { type: "response", id: "one", generation: 0, response })).toBe(replacement);
     expect(
       chatReducer(reset, {
         type: "response",

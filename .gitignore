@@ -13,3 +13,9 @@ docs/research/
 themes/**/*.history.json
 themes/**/*.pictures.json
 *.tsbuildinfo
+.playwright-cli/
+output/
+themes/**/preview*.png
+themes/**/preview.html
+themes/**/sheet*.png
+themes/**/sheet.html

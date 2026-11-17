@@ -37,6 +37,10 @@ export type ChatAction =
       generation: number;
       response: PublicResponse;
     };
+export function retryBlocked(state: ChatState): boolean {
+  const last = state.transcript.at(-1);
+  return state.error?.retryable === false && last?.role === "user" && last.text === state.draft;
+}
 export function chatReducer(state: ChatState, action: ChatAction): ChatState {
   switch (action.type) {
     case "draft":
@@ -61,7 +65,7 @@ export function chatReducer(state: ChatState, action: ChatAction): ChatState {
           }
         : state;
     case "send": {
-      if (state.active) return state;
+      if (state.active || retryBlocked(state)) return state;
       const unanswered = state.transcript.at(-1)?.role === "user";
       const feedback = !state.draft.trim()
         ? "emptyMessage"

@@ -11,7 +11,9 @@ function localOrigin(request:Request):boolean{
   try{
     const url=new URL(request.url);
     const origin=new URL(request.headers.get('origin')??'');
-    return ['localhost','127.0.0.1','[::1]'].includes(url.hostname) && ['http:','https:'].includes(url.protocol) && origin.origin===url.origin && request.headers.get('origin')===origin.origin && request.headers.get('host')===url.host;
+    const loopback=['localhost','127.0.0.1','[::1]'];
+    // Next normalizes loopback URL hostnames; compare the actual Host against Origin.
+    return loopback.includes(url.hostname) && loopback.includes(origin.hostname) && ['http:','https:'].includes(url.protocol) && origin.protocol===url.protocol && origin.port===url.port && request.headers.get('origin')===origin.origin && request.headers.get('host')===origin.host;
   }catch{return false;}
 }
 export async function POST(request:Request):Promise<Response>{

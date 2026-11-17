@@ -25,10 +25,11 @@ import {
   PublicResponseSchema,
   type Reply,
   type ReplyLanguage,
+  type Language,
 } from "../lib/contracts";
 import { getUiCopy, errorCopy } from "../lib/copy";
-import { resolveLanguage } from "../lib/locale";
-import { initialChat, chatReducer, type ChatAction } from "../lib/chat-state";
+import { resolveLanguage, conversationLanguage } from "../lib/locale";
+import { initialChat, chatReducer, retryBlocked, type ChatAction } from "../lib/chat-state";
 const prose: CSSProperties = {
   whiteSpace: "pre-wrap",
   overflowWrap: "anywhere",
@@ -76,8 +77,10 @@ export default function Page() {
   const current = useRef(state);
   const controller = useRef<AbortController | null>(null);
   const input = useRef<HTMLTextAreaElement>(null);
+  const cancelButton = useRef<HTMLButtonElement>(null);
+  const focusAfterReply = useRef(false);
   const [resetOpen, setResetOpen] = useState(false);
-  const [announcement, setAnnouncement] = useState("");
+  const [announcement, setAnnouncement] = useState<{ text: string; language: Language }>({ text: "", language: "en" });
   const language = state.language === "ur" ? "ur" : "en";
   const copy = getUiCopy(language);
   const pending = !!state.active;
@@ -96,6 +99,12 @@ export default function Page() {
     document.documentElement.dir = language === "ur" ? "rtl" : "ltr";
   }, [language]);
   useEffect(() => () => controller.current?.abort(), []);
+  useEffect(() => {
+    if (!pending && focusAfterReply.current) {
+      focusAfterReply.current = false;
+      if (document.activeElement === document.body) input.current?.focus();
+    }
+  }, [pending]);
   function isPending() {
     return !!current.current.active;
   }
@@ -114,9 +123,10 @@ export default function Page() {
     const responseLanguage = resolveLanguage(
       next.language,
       next.draft,
-      language,
+      conversationLanguage(next.transcript.slice(0, -1)),
     );
     if (new TextEncoder().encode(body).length > LIMITS.requestBytes) {
+      const error = errorCopy("too_large", responseLanguage);
       update({
         type: "response",
         id,
@@ -124,14 +134,15 @@ export default function Page() {
         response: {
           ok: false,
           requestId: id,
-          error: errorCopy("too_large", responseLanguage),
+          error,
         },
       });
+      setAnnouncement({ text: error.message, language: error.language });
       return;
     }
     const abort = new AbortController();
     controller.current = abort;
-    setAnnouncement(copy.preparing);
+    setAnnouncement({ text: copy.preparing, language });
     try {
       const response = await fetch("/api/coach", {
         method: "POST",
@@ -146,14 +157,11 @@ export default function Page() {
         return;
       if (parsed.data.requestId !== null && parsed.data.requestId !== id)
         throw new Error("Mismatched response");
+      focusAfterReply.current = parsed.data.ok && document.activeElement === cancelButton.current;
       update({ type: "response", id, generation, response: parsed.data });
-      setAnnouncement(
-        parsed.data.ok
-          ? parsed.data.reply.kind === "urgent"
-            ? ""
-            : copy.replyReady
-          : parsed.data.error.message,
-      );
+      setAnnouncement(parsed.data.ok
+        ? { text: parsed.data.reply.kind === "urgent" ? "" : copy.replyReady, language }
+        : { text: parsed.data.error.message, language: parsed.data.error.language });
     } catch {
       if (
         !current.current.active ||
@@ -168,20 +176,22 @@ export default function Page() {
         generation,
         response: { ok: false, requestId: id, error },
       });
-      setAnnouncement(error.message);
+      setAnnouncement({ text: error.message, language: error.language });
     }
   }
   function cancel() {
+    focusAfterReply.current = false;
     controller.current?.abort();
     update({ type: "cancel" });
-    setAnnouncement(copy.cancelled);
+    setAnnouncement({ text: copy.cancelled, language });
     input.current?.focus();
   }
   function clear() {
+    focusAfterReply.current = false;
     controller.current?.abort();
     update({ type: "reset" });
     setResetOpen(false);
-    setAnnouncement("");
+    setAnnouncement({ text: "", language });
     requestAnimationFrame(() => input.current?.focus());
   }
   return (
@@ -256,12 +266,8 @@ export default function Page() {
                           </Heading>
                           {turn.role === "user" ? (
                             <section
-                              lang={resolveLanguage(
-                                "auto",
-                                turn.text,
-                                language,
-                              )}
-                              dir="auto"
+                              lang={conversationLanguage(state.transcript.slice(0, i + 1))}
+                              dir={conversationLanguage(state.transcript.slice(0, i + 1)) === "ur" ? "rtl" : "ltr"}
                               style={prose}
                             >
                               <Text style={prose}>{turn.text}</Text>
@@ -277,11 +283,13 @@ export default function Page() {
               )}
               <VStack gap={4}>
                 {state.error ? (
+                  <section lang={state.error.language} dir={state.error.language === "ur" ? "rtl" : "ltr"} style={prose}>
                   <Banner
                     status="error"
                     title={state.error.message}
                     collapsible={false}
                   />
+                  </section>
                 ) : null}
                 {state.cancelled ? <Text>{copy.cancelled}</Text> : null}
                 {atLimit ? (
@@ -313,11 +321,11 @@ export default function Page() {
                   <Button
                     label={unanswered ? copy.retry : copy.send}
                     variant="primary"
-                    isDisabled={pending || atLimit}
+                    isDisabled={pending || atLimit || retryBlocked(state)}
                     onClick={() => void send()}
                   />
                   {pending ? (
-                    <Button label={copy.cancel} onClick={cancel} />
+                    <Button ref={cancelButton} label={copy.cancel} onClick={cancel} />
                   ) : unanswered ? (
                     <Button
                       label={copy.edit}
@@ -325,9 +333,9 @@ export default function Page() {
                     />
                   ) : null}
                 </HStack>
-                <Text role="status" aria-live="polite">
-                  {announcement}
-                </Text>
+                <section role="status" aria-live="polite" lang={announcement.language} dir={announcement.language === "ur" ? "rtl" : "ltr"}>
+                  <Text>{announcement.text}</Text>
+                </section>
                 <Text color="secondary" style={prose}>
                   {copy.scope}
                 </Text>

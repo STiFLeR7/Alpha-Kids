@@ -3,6 +3,15 @@ vi.mock('server-only',()=>({}));
 vi.mock('../lib/coach',()=>({coach:vi.fn()}));
 import {POST} from '../app/api/coach/route';
 import {coach} from '../lib/coach';
+import {NextRequest} from 'next/server';
+it('accepts Next-normalized loopback URLs only when actual Host and Origin match',async()=>{
+ vi.mocked(coach).mockReset().mockResolvedValue({kind:'clarify',reason:'missing_context',language:'en',question:'How old is your child?'});
+ const normalized=new NextRequest(req());
+ expect(new URL(normalized.url).hostname).toBe('localhost');
+ expect((await POST(normalized)).status).toBe(200);
+ const mismatched=new NextRequest(req('http://localhost:3000'));
+ expect((await POST(mismatched)).status).toBe(403);
+});
 it('rejects malformed public output and never exposes its wording',async()=>{
  vi.mocked(coach).mockResolvedValueOnce({kind:'coach',acknowledgment:'SENTINEL'} as never);
  const response=await POST(req());
