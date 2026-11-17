@@ -222,7 +222,7 @@ Do not persist to local/session storage or log conversation content. Explain ref
 
 1. Integrator owns package/lockfile, tsconfig, Next/test config, scripts, contracts and copy skeleton first.
    Add only Next, TypeScript/types, Zod and necessary test tooling; keep installed Astryx. No competing package edits.
-2. Once contracts/copy exports freeze, server worker owns route/coach/gemini and server tests;
+2. Once contracts/copy exports freeze, server worker owns route/coach/openrouter and server tests;
    UI worker owns page/layout/theme and UI tests. These are the smallest independent streams.
    Both use shared fixtures; integrator alone changes contracts/config and resolves interface changes.
 3. An evaluation worker can prepare synthetic fixtures and the runner against the frozen public contract in parallel.
@@ -230,7 +230,7 @@ Do not persist to local/session storage or log conversation content. Explain ref
    Parent indexes current documents and excludes superseded local artifacts from the submission.
 
 Implemented commands: `npm run typecheck` (`tsc --noEmit`), `npm test` (Vitest run), `npm run build`,
-`npm run astryx -- doctor --built .next`; confirm CLI accepts this output path and resolve failures before delivery.
+`npm run astryx -- doctor --built .` to inspect source and build; resolve failures before delivery.
 UI worker follows `npm run astryx -- build`, template/component inspection, layout docs and theme-editor PNG inspection.
 No raw div/span, utility compiler assumptions or hardcoded colors/spacing; theme changes need visual verification.
 
