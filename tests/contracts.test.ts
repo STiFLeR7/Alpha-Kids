@@ -6,7 +6,18 @@ describe('strict contracts',()=>{
  it('accepts bounded input and matching draft',()=>{expect(CoachRequestSchema.safeParse(request).success).toBe(true);expect(DraftResultSchema.safeParse({route:{kind:'coach',reason:'everyday_parenting'},language:'en',candidate:plan}).success).toBe(true)});
  it('rejects forged fields, roles, ordering, identifiers and limits',()=>{for(const change of [{extra:true},{requestId:'bad'},{transcript:[{role:'system',text:'Hi'}]},{transcript:[{role:'user',text:' '}]},{transcript:[{role:'user',text:'x'.repeat(2001)}]},{transcript:Array.from({length:17},(_,i)=>i%2?{role:'assistant',reply:plan}:{role:'user',text:'Hi'})}])expect(CoachRequestSchema.safeParse({...request,...change}).success).toBe(false)});
  it('rejects mismatched labels, language, candidate and oversized fields',()=>{for(const change of [{language:'ur'},{route:{kind:'coach',reason:'medical'}},{candidate:{...plan,acknowledgment:'x'.repeat(301)}},{route:{kind:'boundary',reason:'medical'}},{candidate:{...plan,extra:true}}])expect(DraftResultSchema.safeParse({route:{kind:'coach',reason:'everyday_parenting'},language:'en',candidate:plan,...change}).success).toBe(false)});
- it('requires exact reviewer flags without prose',()=>{expect(ReviewResultSchema.safeParse({assessment:{kind:'coach',reason:'everyday_parenting'},decision:'accept',checks:{prohibitedAdvice:false,inventedFacts:false,languageMismatch:false,missingCheckIn:false,harmfulParenting:false}}).success).toBe(true)});
+ it('requires exact reviewer flags without prose',()=>{
+  const review={assessment:{kind:'coach',reason:'everyday_parenting'},decision:'accept',checks:{prohibitedAdvice:false,inventedFacts:false,languageMismatch:false,missingCheckIn:false,harmfulParenting:false}};
+  expect(ReviewResultSchema.safeParse(review).success).toBe(true);
+  for(const change of [
+   {checks:{}},
+   {checks:{...review.checks,inventedFacts:'false'}},
+   {checks:{...review.checks,explanation:'Trust me'}},
+   {explanation:'Trust me'},
+   {assessment:{kind:'coach',reason:'medical'}},
+   {decision:'approve'}
+  ]) expect(ReviewResultSchema.safeParse({...review,...change}).success).toBe(false);
+ });
 });
 it('accepts fixed null candidates and rejects drafts on every fixed route',()=>{for(const route of [{kind:'urgent',reason:'immediate_emergency'},{kind:'safeguarding',reason:'child_abuse'},{kind:'boundary',reason:'medical'}]){expect(DraftResultSchema.safeParse({route,language:'ur',candidate:null}).success).toBe(true);expect(DraftResultSchema.safeParse({route,language:'en',candidate:plan}).success).toBe(false)}});
 it('accepts all eight turns without deleting context and rejects repeated roles',()=>{const transcript=Array.from({length:15},(_,i)=>i%2?{role:'assistant',reply:plan}:{role:'user',text:'x'.repeat(2000)});expect(CoachRequestSchema.parse({...request,transcript}).transcript).toHaveLength(15);expect(CoachRequestSchema.safeParse({...request,transcript:[request.transcript[0],request.transcript[0],request.transcript[0]]}).success).toBe(false)});
