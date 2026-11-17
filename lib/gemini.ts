@@ -14,8 +14,8 @@ export async function generateJson(args: {system:string;input:string;schema:obje
   let reader:ReadableStreamDefaultReader<Uint8Array>|undefined;
   try {
     const aborted = new Promise<never>((_,reject)=>controller.signal.addEventListener('abort',()=>reject(new CoachError('deadline')),{once:true}));
-    const response = await Promise.race([fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent', {
-      method:'POST',signal:controller.signal,headers:{'content-type':'application/json','x-goog-api-key':key},
+    const response = await Promise.race([fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:generateContent', {
+      method:'POST',redirect:'error',signal:controller.signal,headers:{'content-type':'application/json','x-goog-api-key':key},
       body:JSON.stringify({systemInstruction:{parts:[{text:args.system}]},contents:[{role:'user',parts:[{text:args.input}]}],generationConfig:{responseMimeType:'application/json',responseJsonSchema:args.schema,maxOutputTokens:args.maxOutputTokens,thinkingConfig:{thinkingLevel:'LOW'}}})
     }),aborted]);
     if (!response.ok) throw new CoachError('provider_failure');
@@ -40,6 +40,7 @@ export async function generateJson(args: {system:string;input:string;schema:obje
     let content='';
     for(const part of candidate.content.parts){
       if(typeof part.text!=='string' || Object.keys(part).some(k=>!['text','thought','thoughtSignature'].includes(k))) throw new CoachError('invalid_output');
+      if ('thought' in part && typeof part.thought !== 'boolean') throw new CoachError('invalid_output');
       if(part.thought!==true) content+=part.text;
     }
     return JSON.parse(content);
@@ -48,6 +49,7 @@ export async function generateJson(args: {system:string;input:string;schema:obje
     if(error instanceof CoachError) throw error;
     throw new CoachError(error instanceof SyntaxError || error instanceof TypeError && reader ? 'invalid_output':'provider_failure');
   } finally {
+    controller.abort();
     clearTimeout(timer);
     ctx.signal.removeEventListener('abort',abort);
     if(reader){void reader.cancel().catch(()=>{});reader.releaseLock();}
