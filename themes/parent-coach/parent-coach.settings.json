@@ -1,0 +1,30 @@
+{
+  "name": "parent-coach",
+  "like": "neutral",
+  "mode": "both",
+  "settings": [
+    {
+      "thing": "accent",
+      "value": "#b54435",
+      "source": "dial"
+    },
+    {
+      "thing": "neutral",
+      "value": "#172b4d",
+      "source": "dial"
+    },
+    {
+      "thing": "font",
+      "value": "system",
+      "source": "dial"
+    },
+    {
+      "thing": "--color-background-body",
+      "value": "#ffffff",
+      "source": "token",
+      "mode": "light"
+    }
+  ],
+  "lifted": [],
+  "palette": "713cf60ce96c3e2f3b2778d331aa8a57d74e4758f38c3c3cbd664f966ff6d736"
+}

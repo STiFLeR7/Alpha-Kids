@@ -10,4 +10,6 @@ mockup.html
 docs/mockup-assets/
 docs/superpowers/
 docs/research/
+themes/**/*.history.json
+themes/**/*.pictures.json
 *.tsbuildinfo
