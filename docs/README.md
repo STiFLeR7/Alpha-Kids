@@ -4,6 +4,7 @@ Root documents describe the application and its design. This folder contains ver
 
 | Document | Purpose |
 | --- | --- |
+| [Start here](../START_HERE.md) | Setup, API-key configuration, example scenarios and reading guide. |
 | [Project README](../README.md) | Install/run commands, scope, limitations and coding-agent disclosure. |
 | [Architecture](../ARCHITECTURE.md) | Request/model/public contracts, guardrails, provider settings, arbitration and limits. |
 | [Safety](../SAFETY.md) | Coaching, escalation, boundary behavior and expectations. |

@@ -2,6 +2,8 @@
 
 A local English/Urdu parent coach built with Next.js, TypeScript and Astryx. An adult parent describes a concern and gets a short practical plan with a check-in, one clarifying question, or a clear referral to human support.
 
+**[Start here](START_HERE.md)** for setup, example conversations and a guide to the supporting documents.
+
 **[Watch the two-minute interface walkthrough](docs/walkthrough.mp4).** It covers an everyday concern, a crisis response and the Urdu interface. The [standalone HTML](docs/walkthrough.html) uses predefined scenarios without network calls; the application uses Gemini. [Evaluation details](docs/EVALUATION.md) preserve separate real Gemini results, observed service failures and remaining language/accessibility checks.
 
 ## Run locally
