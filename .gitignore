@@ -6,7 +6,7 @@ node_modules/
 .infisical.yaml
 docs/mockup-assets/.preview-*.html
 
-# Superseded local design/research artifacts; keep the submission focused.
+# Local design, research and generated previews.
 mockup.html
 docs/mockup-assets/
 docs/superpowers/

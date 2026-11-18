@@ -92,10 +92,10 @@ Use fictional, non-identifying examples. Messages and history go to Google's Gem
 
 Both stages pin `gemini-3.5-flash-lite` with LOW thinking, with no automatic fallback or retry. Ordinary answers use two calls; a validated urgent/safeguarding route uses one. Account quota, availability and billing apply; this setup makes no free-tier or zero-cost guarantee. The app preserves your message when a request fails.
 
-This is bring-your-own-key: each installation uses its own server-side `GEMINI_API_KEY`. The application does not use a coding subscription. If requests fail, the server terminal records only a numeric upstream HTTP status and a fixed category. `429 / quota_or_rate_limit` means the configured account needs available quota or a later retry; `401`/`403` indicates access, and `400` indicates request configuration. Provider bodies, keys and conversation text are excluded from these diagnostics. A public 503 response alone does not identify the upstream cause.
+This is bring-your-own-key: each installation uses its own server-side `GEMINI_API_KEY`. If requests fail, the server terminal records only a numeric upstream HTTP status and a fixed category. `429 / quota_or_rate_limit` means the configured account needs available quota or a later retry; `401`/`403` indicates access, and `400` indicates request configuration. Provider bodies, keys and conversation text are excluded from these diagnostics. A public 503 response alone does not identify the upstream cause.
 
 ## Documentation and coding agents
 
-[ARCHITECTURE.md](ARCHITECTURE.md) describes contracts and flow; [SAFETY.md](SAFETY.md) defines behavior; [DESIGN.md](DESIGN.md) explains the Astryx UI. [docs/README.md](docs/README.md) indexes evidence. [PLAN.md](PLAN.md) retains the approved execution plan.
+[ARCHITECTURE.md](ARCHITECTURE.md) describes contracts and flow; [SAFETY.md](SAFETY.md) defines behavior; [DESIGN.md](DESIGN.md) explains the Astryx UI. [docs/README.md](docs/README.md) indexes evidence. [PLAN.md](PLAN.md) describes implementation and acceptance criteria.
 
 Coding agents assisted with implementation, tests and code review. Verification results and remaining checks are documented in [evaluation](docs/EVALUATION.md).

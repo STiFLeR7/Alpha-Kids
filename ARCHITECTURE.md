@@ -1,6 +1,6 @@
 # Parent coach architecture
 
-Status: approved baseline implemented, with integration verification in progress on 2026-11-17. Actual results and remaining findings are recorded in [docs/EVALUATION.md](docs/EVALUATION.md).
+Implementation results and remaining checks are recorded in [docs/EVALUATION.md](docs/EVALUATION.md).
 Read with [SAFETY.md](SAFETY.md), [DESIGN.md](DESIGN.md), and [PLAN.md](PLAN.md).
 
 ## Scope and evidence
@@ -8,7 +8,7 @@ Read with [SAFETY.md](SAFETY.md), [DESIGN.md](DESIGN.md), and [PLAN.md](PLAN.md)
 One local Next.js TypeScript App Router app; one server `POST /api/coach`; browser memory only.
 Adult parent writes English/Urdu; receives a brief practical plan and check-in, clarification, or fixed support copy.
 No mascot, intake form, scores, tracker, login, database, persistence, analytics, hosting or external actions.
-White/navy/coral is the accepted baseline in the approved plan. Use actual Astryx components and theme tokens.
+The interface uses a white/navy/coral palette with Astryx components and theme tokens.
 English/Urdu/Auto UI: explicit Urdu localizes chrome and sets RTL; Auto has bilingual input cues and English chrome.
 Every message has its own `lang`/direction; render plain text, never model HTML or unchecked streaming.
 
@@ -93,7 +93,7 @@ Export `CoachRequestSchema`, `PublicResponseSchema`, `DraftResultSchema`, `Revie
 `errorCopy(reason: UnavailableReason, language: Language): PublicError` are the shared copy exports.
 Use `getUiCopy(language: Language): UiCopy` for UI strings; define that returned shape completely in the foundation task.
 
-## Ownership and seams
+## Module responsibilities
 
 | Module | Single responsibility / exported seam |
 | --- | --- |
@@ -190,7 +190,7 @@ Do not queue; two active local requests maximum, then 429. Release slots/timers 
 These limits are deadlines rather than latency promises; overlong output or provider delays return a controlled failure.
 Never expose raw provider body/errors to the browser or logs.
 
-The approved implementation run includes a synthetic live preflight via the native-loaded local server key; no separate permission loop is planned:
+Provider verification uses fictional inputs and the locally configured server key:
 verify access/quota/billing, exact request/schema/settings, normal EN/UR two-call runs and fixed crisis routing.
 Measure complete A+B latency at shortest and maximum allowed history and review truncation/errors.
 If it cannot reliably fit 30s, revise the budget/model decision explicitly; never skip review to meet a stopwatch.

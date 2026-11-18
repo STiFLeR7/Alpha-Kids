@@ -17,6 +17,6 @@ To open the HTML, download `walkthrough.html` and open it in a modern browser. I
 
 Other inputs remain in the composer with validation rather than producing an invented reply. Suggestions fill the field; they do not run a model. The language selector demonstrates English/Urdu presentation, not bilingual inference. New chat confirms before clearing; Privacy & limits supports Escape and returns focus.
 
-The browser runner blocks direct `file://` navigation, so verification and capture loaded the HTML contents into an isolated blank page with network access disabled. Focused checks observed zero resource requests and no page errors. The application was stopped during the scenario recording. The [README](../README.md) explains running the real application with a personal Gemini key and no vault account.
+Offline browser checks observed zero resource requests and no page errors. The [README](../README.md) explains running the real application with a personal Gemini key.
 
-These MP4 files can be shared directly or uploaded to the owner's preferred video host. No email or third-party video upload has been sent.
+These MP4 files can be shared directly or uploaded to a video host. No email or third-party video upload has been sent.

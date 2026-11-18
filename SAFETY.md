@@ -1,6 +1,6 @@
 # Safety contract
 
-Status: approved behavior contract, implemented with evaluation and fixes in progress on 17 November 2026. Read with [ARCHITECTURE.md](ARCHITECTURE.md), [DESIGN.md](DESIGN.md), and [docs/EVALUATION.md](docs/EVALUATION.md). This document specifies intended behavior, not a safety guarantee or medical/legal advice. Clinical validation has not occurred.
+Read with [ARCHITECTURE.md](ARCHITECTURE.md), [DESIGN.md](DESIGN.md), and [docs/EVALUATION.md](docs/EVALUATION.md). This document specifies intended behavior, not a safety guarantee or medical/legal advice. Clinical validation has not occurred.
 
 ## Scope and useful coaching
 
@@ -8,7 +8,7 @@ An adult parent enters an English or Urdu concern and receives general parenting
 
 Use information already supplied. For ordinary bedtime, screen-time or frustration concerns, offer a manageable first step without requiring an intake form. Ask **one** clarifying question only when a missing fact materially affects the usefulness or safety of the answer; do not invent the child's age or situation. A failed suggestion should lead to a different small step using the conversation context. Never promise that the app will follow up automatically.
 
-The UI uses actual Astryx components and theme tokens, English/Urdu/Auto, readable per-message direction and Urdu RTL. No mascot, scores, tracker, gamification, login or persistent history. White/navy/coral is the accepted baseline in the approved plan. Serious responses need clear text and headings independent of color; no delayed check-in should displace a human-help action.
+The UI uses Astryx components and theme tokens, English/Urdu/Auto, readable per-message direction and Urdu RTL. No mascot, scores, tracker, gamification, login or persistent history. The palette is white/navy/coral. Serious responses need clear text and headings independent of color; no delayed check-in should displace a human-help action.
 
 ## Public response states and allowed reasons
 

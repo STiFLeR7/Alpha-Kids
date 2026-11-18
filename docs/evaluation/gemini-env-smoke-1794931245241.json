@@ -3,7 +3,7 @@
   "layer": "direct-coach-module",
   "model": "gemini-3.5-flash-lite",
   "settings": "LOW; A2048/B1024; stages14s/total30s; promptsV3",
-  "environmentSource": "Next native .env loader; no vault injection",
+  "environmentSource": "Next native .env loader",
   "semanticReview": "pending",
   "cases": [
     {

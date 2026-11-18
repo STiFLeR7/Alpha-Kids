@@ -1,6 +1,6 @@
 # Documentation map
 
-Root documents describe the app and its approved design. This folder contains verification and submission evidence. A planned check is not a passed check.
+Root documents describe the application and its design. This folder contains verification and submission evidence. A planned check is not a passed check.
 
 | Document | Purpose |
 | --- | --- |
@@ -8,7 +8,7 @@ Root documents describe the app and its approved design. This folder contains ve
 | [Architecture](../ARCHITECTURE.md) | Request/model/public contracts, guardrails, provider settings, arbitration and limits. |
 | [Safety](../SAFETY.md) | Coaching, escalation, boundary behavior and expectations. |
 | [Design](../DESIGN.md) | Astryx components, bilingual presentation and interaction requirements. |
-| [Execution plan](../PLAN.md) | Approved sequence and ownership; historical plan, not a completion claim. |
+| [Execution plan](../PLAN.md) | Implementation scope and acceptance criteria. |
 | [Delivery checklist](STATUS.md) | Current completed, remaining and blocked items, including later revisions. |
 | [Evaluation](EVALUATION.md) | Actual offline/live checks, failures, prompt revisions and remaining limitations. |
 | [Response quality](QUALITY.md) | Offline review of returned replies, fixture expectations and a human acceptance rubric. |
@@ -18,4 +18,4 @@ Root documents describe the app and its approved design. This folder contains ve
 | [Standalone interface](walkthrough.html) | Self-contained HTML with two predefined scenarios and no network calls. |
 | [Screenshots](screenshots/) | Current desktop and English/Urdu mobile interface. |
 
-The older standalone mockup, mascot assets, local research and agent scratch reports are excluded from the submission. They are not dependencies or evidence of current live behavior. Evaluation artifacts deliberately contain fictional examples; normal app conversations are not logged.
+Evaluation artifacts contain fictional examples. Normal application conversations are not logged.

@@ -1,6 +1,6 @@
 # Parent coach design
 
-## Chat layout revision — 17 November 2026
+## Chat layout
 
 The interface uses a **light palette and a compact chat layout**. Existing safety, language, retry, cancellation and reset behavior remains required.
 
@@ -10,7 +10,7 @@ Use the installed Astryx `ai-chat-landing` composition and `ChatComposer` shell.
 
 Below the composer, show **“AI can make mistakes. Use your judgment.”** with a corresponding Urdu sentence. One line where it fits; natural wrapping on narrow screens/zoom, never clipping. A small **Privacy & limits** control opens an accessible dialog with the existing scope/privacy details, available before sending. Crisis, safeguarding, boundary and error content remains fully visible. Keep live announcements without an empty visual paragraph; show pending status during a request.
 
-Approach: retain the approved light palette and improve hierarchy through actual Astryx chat components.
+Approach: retain the light palette and improve hierarchy through actual Astryx chat components.
 
 Acceptance: inspect actual desktop and 390-wide Urdu screenshots; verify wrapping/no horizontal scrolling, example fill/focus, newline entry, send/cancel/retry/reset safeguards, privacy dialog naming/focus return and fully visible urgent support. Build/doctor and reducer/copy checks supplement those observations; they do not establish full accessibility or native-language review.
 
@@ -24,7 +24,7 @@ Acceptance: inspect actual desktop and 390-wide Urdu screenshots; verify wrappin
 
 The standalone interface walkthrough reuses the actual rendered Astryx interface with predefined scenarios. The application keeps its live Gemini integration. The recording is an interface walkthrough; separate evaluation evidence records actual provider behavior.
 
-Status: approved design implemented on 17 November 2026; verification results are documented in the evaluation record. Read with [ARCHITECTURE.md](ARCHITECTURE.md), [SAFETY.md](SAFETY.md), and [docs/EVALUATION.md](docs/EVALUATION.md). No mascot; white/navy/coral. Actual desktop and Urdu mobile screens have been inspected, with focused keyboard/state checks. This does not establish native-language or full assistive-technology acceptance.
+Verification results are documented in the evaluation record. Read with [ARCHITECTURE.md](ARCHITECTURE.md), [SAFETY.md](SAFETY.md), and [docs/EVALUATION.md](docs/EVALUATION.md). No mascot; white/navy/coral. Actual desktop and Urdu mobile screens have been inspected, with focused keyboard/state checks. This does not establish native-language or full assistive-technology acceptance.
 
 ## Experience
 

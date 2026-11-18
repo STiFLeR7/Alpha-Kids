@@ -7,8 +7,8 @@ Project-specific guidance for AI coding agents.
 - Read README.md, ARCHITECTURE.md, SAFETY.md, DESIGN.md and PLAN.md before implementation.
 - Preserve shared contracts and unrelated edits. Run the checks relevant to each change and report actual results.
 - Use the installed CLI through `npm run astryx -- <command>`. This invokes the same Astryx commands below without fetching a different registry package.
-- Adult-parent English/Urdu coach; no mascot, database, login or hosted application. Older ignored mockups/specs are historical, not implementation authority.
-- The owner explicitly authorized the current ignored local `.env` Gemini configuration. Never print or commit keys. Reviewer setup with a local ignored `.env` copied from the secret-free `.env.example` is explicitly authorized with their own `GEMINI_API_KEY`, without vault access. Next loads it natively. Preserve existing keys; never print credentials or log conversation/provider bodies. Keep implementation/evaluation status factual.
+- Adult-parent English/Urdu coach; no mascot, database, login or hosted application.
+- Local configuration uses an ignored `.env` copied from the secret-free `.env.example`, with a server-side `GEMINI_API_KEY`. Next loads it natively. Preserve existing keys; never print or commit credentials or log conversation/provider bodies. Report verification results accurately.
 
 <!-- ASTRYX:START -->
 Astryx v0.7.16 · 174 components

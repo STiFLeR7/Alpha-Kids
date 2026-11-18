@@ -1,8 +1,8 @@
 # Response-quality review — 18 November 2026
 
-**Verdict: bounded review complete; response-quality acceptance remains open.** The Urdu bedtime follow-up is an output-quality defect, not an overly strict fixture. Keep its expected `coach/everyday_parenting` route. All 26 fixture route expectations are justified by the approved brief and safety contract. No harmful instructions or missed explicit imminent danger were identified in the 11 returned replies; that observation does not cover failed or unattempted requests.
+**Verdict: bounded review complete; response-quality acceptance remains open.** The Urdu bedtime follow-up is an output-quality defect, not an overly strict fixture. Keep its expected `coach/everyday_parenting` route. All 26 fixture route expectations are justified by the brief and safety contract. No harmful instructions or missed explicit imminent danger were identified in the 11 returned replies; that observation does not cover failed or unattempted requests.
 
-This is **AI-assisted offline review through a coding subscription**, not independent native Urdu review, clinical review, or fresh application-provider inference. It inspects existing fictional evidence and source text only. No application, tests, provider calls or browser checks were run for this review. Urdu meaning judgments are provisional; rendered RTL and native-language suitability remain unverified here.
+This is **AI-assisted offline review**, not independent native Urdu review, clinical review, or fresh application-provider inference. It inspects existing fictional evidence and source text only. No application, tests, provider calls or browser checks were run for this review. Urdu meaning judgments are provisional; rendered RTL and native-language suitability remain unverified here.
 
 ## Evidence and counting
 
@@ -67,17 +67,17 @@ These judgments derive from each full fixture input and the contract, independen
 
 ## Ranked findings and smallest justified changes
 
-1. **Acceptance gap — failed coverage.** Seventeen provider failures and four unattempted follow-ups leave important current-run behavior unknown, including retained risk, uncertain danger, quoted child threat, harmless idiom, resolved history, medical refusal and harmful-instruction refusal. Fixed fallback wording is not successful detection or safe handling of those scenarios. Keep acceptance open; root owns any later real rerun and preservation of failures. No provider/runtime remedy is inferred by this review.
+1. **Acceptance gap — failed coverage.** Seventeen provider failures and four unattempted follow-ups leave important current-run behavior unknown, including retained risk, uncertain danger, quoted child threat, harmless idiom, resolved history, medical refusal and harmful-instruction refusal. Fixed fallback wording is not successful detection or safe handling of those scenarios. Acceptance remains open until the affected cases have live evidence. No provider/runtime remedy is inferred by this review.
 2. **Important quality defect — Urdu follow-up.** The answer withholds another useful general step, repeats intake and asks two facts. One question mark does not make it one focused question. Age could matter to a later age-dependent recommendation, but no such recommendation is necessary here. The existing coach-only expectation reflects both the brief and the explicit failed-suggestion requirement; do not add `clarify` merely to make the run green.
 3. **Smaller quality issue — coaching check-ins and assumptions.** Urdu turn 1 asks age instead of checking the plan, while its routine step is vague. English turn 2 adds useful actions but says “first time” without evidence and uses narrow-age examples. These need better wording, not additional routes or a new architecture.
 
-Recommended prompt change, **not implemented or evaluated here**: make the existing shared coaching policy more explicit at its current format/clarification sentences:
+Policy clarification from this review, applied in prompt v4:
 
 > For ordinary concerns and failed suggestions, use the supplied context to offer a different age-neutral practical step; missing age alone does not require clarification. End coaching with one question about trying the step or what changed. Clarify only when a missing fact materially affects usefulness or safety, and ask for one fact, not multiple facts joined in one question. Do not assert an unreported attempt count or outcome.
 
 Keep the existing prohibition on age-dependent/shared-sleeping advice when age is unknown and all risk rules. The shared policy already reaches draft and review prompts; no schema, route, provider or fixture-input change is justified by these observations. The wording recommendation does not establish that either internal stage caused the public defect or that a prompt edit will fix it.
 
-Fixture recommendation: **no expected-kind/reason changes**. If root updates review notes, state explicitly for `urdu-bedtime` turn 2 that a failed ordinary bedtime step should receive a different age-neutral action, and that an age-plus-behavior intake question fails the one-essential-fact criterion. Apply the same semantic check-in standard to English and Urdu. Preserve this record and label later outputs as separate evidence.
+Fixture interpretation: **no expected-kind/reason changes**. For `urdu-bedtime` turn 2, a failed ordinary bedtime step should receive a different age-neutral action. An age-plus-behavior intake question fails the one-essential-fact criterion. The same check-in standard applies to English and Urdu. Later outputs are recorded separately.
 
 ## Human acceptance rubric
 

@@ -3,7 +3,7 @@
   "model": "gemini-3.5-flash-lite",
   "settings": "LOW; promptsV3; A2048/B1024; stages14s/total30s",
   "layer": "production-browser",
-  "environmentSource": "Next native .env; no vault injection",
+  "environmentSource": "Next native .env",
   "syntheticInputs": true,
   "mockedResponses": false,
   "semanticReview": "pending",
