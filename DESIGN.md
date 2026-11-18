@@ -22,7 +22,7 @@ Acceptance: inspect actual desktop and 390-wide Urdu screenshots; verify wrappin
 - Footer: two long paragraphs became one short sentence and a Privacy & limits dialog. Critical response content remains inline and fully visible.
 - Responsive behavior: inspected 1440-wide desktop, 390-wide English/Urdu and 320-wide Urdu. Checked RTL document metadata, overflow, example focus/newline, privacy dialog name/Escape/focus return, cancellation, non-retryable errors and reset. These are focused browser observations, not a full assistive-technology audit.
 
-The standalone interface walkthrough reuses the actual rendered Astryx interface with predefined scenarios. The application keeps its live Gemini integration. The recording is an interface walkthrough; separate evaluation evidence records actual provider behavior.
+The recorded interface walkthrough uses predefined scenarios. Separate evaluation evidence records actual Gemini behavior.
 
 Verification results are documented in the evaluation record. Read with [ARCHITECTURE.md](ARCHITECTURE.md), [SAFETY.md](SAFETY.md), and [docs/EVALUATION.md](docs/EVALUATION.md). No mascot; white/navy/coral. Actual desktop and Urdu mobile screens have been inspected, with focused keyboard/state checks. This does not establish native-language or full assistive-technology acceptance.
 

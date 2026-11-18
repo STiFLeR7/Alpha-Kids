@@ -1,7 +1,7 @@
 # Parent coach architecture
 
 Implementation results and remaining checks are recorded in [docs/EVALUATION.md](docs/EVALUATION.md).
-Read with [SAFETY.md](SAFETY.md), [DESIGN.md](DESIGN.md), and [PLAN.md](PLAN.md).
+Read with [SAFETY.md](SAFETY.md), [DESIGN.md](DESIGN.md), and [evaluation](docs/EVALUATION.md).
 
 ## Scope and evidence
 

@@ -62,10 +62,10 @@ Your draft remains available for retry or editing. Check the server terminal for
 ## Read or watch
 
 - [Two-minute interface walkthrough](docs/walkthrough.mp4) — everyday concern, crisis response and Urdu interface.
-- [Recording details](docs/WALKTHROUGH.md) — the video uses predefined responses in standalone HTML; real Gemini results are recorded separately.
+- [Recording details](docs/WALKTHROUGH.md) — recording scope and separate live Gemini evidence.
 - [README](README.md) — commands, privacy, limits and coding-agent note.
 - [Architecture](ARCHITECTURE.md) and [safety behavior](SAFETY.md) — data flow, contracts and guardrails.
-- [Evaluation](docs/EVALUATION.md), [response quality](docs/QUALITY.md) and [current checklist](docs/STATUS.md) — verified results and remaining checks.
+- [Evaluation](docs/EVALUATION.md) — verified results, response-quality findings and remaining checks.
 - [Documentation index](docs/README.md) — supporting files.
 
 ## Optional checks

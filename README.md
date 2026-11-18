@@ -4,7 +4,7 @@ A local English/Urdu parent coach built with Next.js, TypeScript and Astryx. An 
 
 **[Start here](START_HERE.md)** for setup, example conversations and a guide to the supporting documents.
 
-**[Watch the two-minute interface walkthrough](docs/walkthrough.mp4).** It covers an everyday concern, a crisis response and the Urdu interface. The [standalone HTML](docs/walkthrough.html) uses predefined scenarios without network calls; the application uses Gemini. [Evaluation details](docs/EVALUATION.md) preserve separate real Gemini results, observed service failures and remaining language/accessibility checks.
+**[Watch the two-minute interface walkthrough](docs/walkthrough.mp4).** It covers an everyday concern, a crisis response and the Urdu interface using predefined example responses. The application uses Gemini. [Evaluation details](docs/EVALUATION.md) provide separate real Gemini results, observed service failures and remaining language/accessibility checks.
 
 ## Run locally
 
@@ -98,6 +98,6 @@ This is bring-your-own-key: each installation uses its own server-side `GEMINI_A
 
 ## Documentation and coding agents
 
-[ARCHITECTURE.md](ARCHITECTURE.md) describes contracts and flow; [SAFETY.md](SAFETY.md) defines behavior; [DESIGN.md](DESIGN.md) explains the Astryx UI. [docs/README.md](docs/README.md) indexes evidence. [PLAN.md](PLAN.md) describes implementation and acceptance criteria.
+[ARCHITECTURE.md](ARCHITECTURE.md) describes contracts and flow; [SAFETY.md](SAFETY.md) defines behavior; [DESIGN.md](DESIGN.md) explains the Astryx UI. [docs/README.md](docs/README.md) indexes evidence.
 
 Coding agents assisted with implementation, tests and code review. Verification results and remaining checks are documented in [evaluation](docs/EVALUATION.md).

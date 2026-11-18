@@ -4,7 +4,7 @@ Project-specific guidance for AI coding agents.
 
 ## Project baseline
 
-- Read README.md, ARCHITECTURE.md, SAFETY.md, DESIGN.md and PLAN.md before implementation.
+- Read README.md, ARCHITECTURE.md, SAFETY.md and DESIGN.md before implementation.
 - Preserve shared contracts and unrelated edits. Run the checks relevant to each change and report actual results.
 - Use the installed CLI through `npm run astryx -- <command>`. This invokes the same Astryx commands below without fetching a different registry package.
 - Adult-parent English/Urdu coach; no mascot, database, login or hosted application.

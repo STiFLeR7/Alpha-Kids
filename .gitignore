@@ -22,3 +22,26 @@ themes/**/preview*.png
 themes/**/preview.html
 themes/**/sheet*.png
 themes/**/sheet.html
+
+# Local recording sources and superseded evaluation experiments.
+docs/walkthrough.html
+docs/everyday-concern.mp4
+docs/crisis-response.mp4
+docs/evaluation/browser-gemini-2026-11-17.json
+docs/evaluation/free-provider-preflight.json
+docs/evaluation/gemini-env-smoke-1794931245241.json
+docs/evaluation/live-2026-11-17T14-09-16.397Z-eb8acb68-1d1d-4309-a8b4-d2e07912c248.json
+docs/evaluation/live-2026-11-17T14-13-47.552Z-551776e0-f489-4ea7-aec2-bda38b02020e.json
+docs/evaluation/live-2026-11-17T14-23-10.897Z-f5ffbfd6-56ee-44ad-8534-5177b461314f.json
+docs/evaluation/live-2026-11-17T15-03-31.773Z-19a2cde2-1829-449a-90a0-5345612521a3.json
+docs/evaluation/live-2026-11-17T15-04-03.037Z-36183952-feb6-4913-950d-f240fa22890d.json
+docs/evaluation/max-history-1794925750664.json
+
+# Local planning, review notes and image exports.
+PLAN.md
+docs/QUALITY.md
+docs/STATUS.md
+docs/screenshots/desktop-home.png
+docs/screenshots/mobile-english.png
+docs/screenshots/mobile-urdu.png
+docs/evaluation/live-2026-11-18T03-25-01.485Z-bc13e18c-ed60-43a1-956f-8d0f2591b09d.json
