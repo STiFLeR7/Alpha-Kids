@@ -2,7 +2,7 @@
 
 A local English/Urdu parent coach built with Next.js, TypeScript and Astryx. An adult parent describes a concern and gets a short practical plan with a check-in, one clarifying question, or a clear referral to human support.
 
-**[Watch the two-minute interface walkthrough](docs/walkthrough.mp4).** It covers an everyday concern, a crisis response and local setup. The [standalone HTML](docs/walkthrough.html) uses predefined scenarios without network calls; the application uses Gemini. [Evaluation details](docs/EVALUATION.md) preserve separate real Gemini results, observed service failures and remaining language/accessibility checks.
+**[Watch the two-minute interface walkthrough](docs/walkthrough.mp4).** It covers an everyday concern, a crisis response and the Urdu interface. The [standalone HTML](docs/walkthrough.html) uses predefined scenarios without network calls; the application uses Gemini. [Evaluation details](docs/EVALUATION.md) preserve separate real Gemini results, observed service failures and remaining language/accessibility checks.
 
 ## Run locally
 
@@ -32,7 +32,7 @@ Edit `.env` and set `GEMINI_API_KEY` to your own Gemini key, then run:
 npm run dev
 ```
 
-Open **http://127.0.0.1:3000**. Next.js loads `.env` natively; restart the server after changing it. Keep `.env` local and ignored. Never prefix the key with `NEXT_PUBLIC_`: it belongs only on the server. The owner explicitly authorized the current local `.env` configuration; it must stay ignored. Never print or commit any key. Reviewers use their own Gemini key and do not need the owner's vault.
+Open **http://127.0.0.1:3000**. Next.js loads `.env` natively; restart the server after changing it. Keep `.env` local and ignored. Never prefix the key with `NEXT_PUBLIC_`: it belongs only on the server. Never print or commit any key.
 
 For a production build:
 
@@ -87,4 +87,4 @@ Both stages pin `gemini-3.5-flash-lite` with LOW thinking, with no automatic fal
 
 [ARCHITECTURE.md](ARCHITECTURE.md) describes contracts and flow; [SAFETY.md](SAFETY.md) defines behavior; [DESIGN.md](DESIGN.md) explains the Astryx UI. [docs/README.md](docs/README.md) indexes evidence. [PLAN.md](PLAN.md) retains the approved execution plan.
 
-GPT-6 Astra Extra High coordinated architecture, integration and reviews. GPT-6.1 Sol Medium agents implemented foundation/contracts, server guardrails, Astryx UI and evaluation tooling in parallel. Astra applied integration fixes and checked tests, live outputs and browser behavior. Human/native-language/clinical validation is not implied by agent review.
+Coding agents assisted with implementation, tests and code review. Verification results and remaining checks are documented in [evaluation](docs/EVALUATION.md).

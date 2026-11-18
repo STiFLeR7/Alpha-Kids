@@ -1,7 +1,7 @@
 # Parent coach architecture
 
 Status: approved baseline implemented, with integration verification in progress on 2026-11-17. Actual results and remaining findings are recorded in [docs/EVALUATION.md](docs/EVALUATION.md).
-Read with [SAFETY.md](SAFETY.md), [DESIGN.md](DESIGN.md), and [PLAN.md](PLAN.md). This supersedes historical specs and mockups. Astra owns integration; Sol 6.1 Medium implements.
+Read with [SAFETY.md](SAFETY.md), [DESIGN.md](DESIGN.md), and [PLAN.md](PLAN.md).
 
 ## Scope and evidence
 
@@ -178,9 +178,9 @@ No generated phone numbers, country inference from Urdu, diagnosis, treatment/do
 
 ## Provider and verification
 
-Implemented: **`gemini-3.5-flash-lite` for both calls through Gemini**, pinned in lib/gemini.ts. Prompts remain DRAFT_SYSTEM_V3 and REVIEW_SYSTEM_V3. The user explicitly requested this restoration and local `.env` configuration on 17 November 2026. Current configuration smoke and production-browser calls include successful everyday/crisis replies and provider failures; availability and full quality acceptance remain open. Current and historical observations are preserved in docs/EVALUATION.md.
+Implemented: **`gemini-3.5-flash-lite` for both calls through Gemini**, pinned in lib/gemini.ts. Prompts remain DRAFT_SYSTEM_V3 and REVIEW_SYSTEM_V3. Current configuration smoke and production-browser calls include successful everyday/crisis replies and provider failures; availability and full quality acceptance remain open. Current and historical observations are preserved in docs/EVALUATION.md.
 
-Native fetch posts to `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:generateContent`, with server-only `GEMINI_API_KEY` in `x-goog-api-key`, systemInstruction and user contents. generationConfig uses `responseMimeType: application/json`, `responseJsonSchema`, and LOW thinking. Local Zod validation remains authoritative. Next loads the ignored local `.env` natively; reviewers copy `.env.example` and supply their own Gemini key without vault access. The owner's current local configuration is explicitly authorized and must stay ignored; never print or commit keys. No automatic model/key rotation, retries or fallback.
+Native fetch posts to `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:generateContent`, with server-only `GEMINI_API_KEY` in `x-goog-api-key`, systemInstruction and user contents. generationConfig uses `responseMimeType: application/json`, `responseJsonSchema`, and LOW thinking. Local Zod validation remains authoritative. Next loads the ignored local `.env` natively; copy `.env.example` and supply your own Gemini key. Never print or commit keys. No automatic model/key rotation, retries or fallback.
 
 Accept exactly one candidate with `finishReason: STOP` and text parts. Reject blocked, malformed, truncated, non-text or invalid-JSON output. A present thought flag must be boolean; true thought parts are excluded. Never expose raw output or reasoning. Outbound redirects are rejected.
 
@@ -218,20 +218,11 @@ never discard a legitimate early 400/403/413 just because the server could not p
 Link request.signal and server timeout to provider AbortSignal; browser cancellation cannot guarantee provider billing stops.
 Do not persist to local/session storage or log conversation content. Explain refresh/reset loss and provider processing near input.
 
-## Execution order and acceptance
-
-1. Integrator owns package/lockfile, tsconfig, Next/test config, scripts, contracts and copy skeleton first.
-   Add only Next, TypeScript/types, Zod and necessary test tooling; keep installed Astryx. No competing package edits.
-2. Once contracts/copy exports freeze, server worker owns route/coach/gemini and server tests;
-   UI worker owns page/layout/theme and UI tests. These are the smallest independent streams.
-   Both use shared fixtures; integrator alone changes contracts/config and resolves interface changes.
-3. An evaluation worker can prepare synthetic fixtures and the runner against the frozen public contract in parallel.
-   Integrator runs offline checks, synthetic live gate, final accessibility/RTL checks and README/walkthrough integration.
-   Parent indexes current documents and excludes superseded local artifacts from the submission.
+## Verification and acceptance
 
 Implemented commands: `npm run typecheck` (`tsc --noEmit`), `npm test` (Vitest run), `npm run build`,
 `npm run astryx -- doctor --built .` to inspect source and build; resolve failures before delivery.
-UI worker follows `npm run astryx -- build`, template/component inspection, layout docs and theme-editor PNG inspection.
+UI changes follow the installed Astryx component/layout documentation and theme-editor PNG inspection.
 No raw div/span, utility compiler assumptions or hardcoded colors/spacing; theme changes need visual verification.
 
 Acceptance: strict request/public schemas and limits; precedence/disagreement matrix; preserved escalation on later failure;

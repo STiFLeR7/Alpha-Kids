@@ -1,6 +1,26 @@
 # Evaluation record
 
-Dated **17 November 2026**. This is a small developer regression exercise, not statistical, clinical or native-language validation. Tests and model outputs were inspected by the coding agent; independent human semantic review remains open. Original artifacts keep `semanticReview: pending` because the runner cannot perform that review.
+Dated **18 November 2026**. This is a small developer regression exercise, not statistical, clinical or native-language validation. Tests and model outputs were inspected by the coding agent; independent human semantic review remains open. Original artifacts keep `semanticReview: pending` because the runner cannot perform that review.
+
+## Submission verification — 18 November
+
+Fresh checks on the source at `13a8de4`:
+
+| Check | Result |
+| --- | --- |
+| Unit/integration tests | 252 passed in 9 files |
+| TypeScript and production build | Passed |
+| Astryx doctor | 21 pass, 0 fail; existing PATH and source-style warnings remain |
+| Production HTTP boundaries | Missing/foreign origin, wrong content type, malformed JSON, oversized body and unknown fields rejected with expected status, validated public errors and `no-store`; no provider calls |
+| Production browser | Empty-send/resize behavior, privacy dialog, suggestion/focus, pending/read-only, Send→Cancel focus, failure→Retry focus, retained draft, cancellation, request count, reset confirmation and Urdu lang/dir/brand passed; lifecycle failures used explicit response fixtures, no provider calls |
+| Deliverable integrity | All three MP4s fully decoded without error; HTML scripts/JSON parsed, no external script/link/image references |
+| Cleanup | 37 raw videos/intermediate images moved from `output/playwright` into an ignored local capture archive; `output/` contains no files. Final recordings/screenshots remain in `docs/`. |
+
+The [new real-provider matrix](evaluation/live-2026-11-18T03-25-01.485Z-bc13e18c-ed60-43a1-956f-8d0f2591b09d.json) exercised all 26 scenarios: **28 of 32 planned requests attempted, 11 replies, 17 HTTP503 provider failures**. Four later turns were skipped because their preceding turn failed. Of the 11 replies, **10 matched the expected kind/reason; one did not**. Every explicit-language reply matched its requested language. No automatic retries were used.
+
+The mismatch is the Urdu bedtime follow-up: the coach asked the child's age and bedtime behavior, while the fixture expected another parenting plan. This is recorded as a quality mismatch, not removed by broadening the fixture after observing it. Successful imminent self-harm, imminent child harm, physical emergency, non-imminent distress and abuse cases selected the expected fixed copy; legal instructions selected the boundary response. Coding-agent inspection found brief practical everyday replies and no medical/legal instructions in these successful outputs. Failed scenarios provide no evidence of correct risk classification. Native Urdu and independent human safety review remain open.
+
+**Acceptance: code/build and focused UI checks pass; reliable live service and full semantic acceptance do not pass.** Submission assets are prepared, but the offline walkthrough cannot resolve those live failures.
 
 ## Reproduce
 
@@ -20,7 +40,7 @@ The sequential runner validates real responses, sends exact loopback Origin, cha
 
 ## Current revision: Gemini and local configuration
 
-The user requested restoration of `gemini-3.5-flash-lite` and explicitly authorized the real local `GEMINI_API_KEY` in ignored `.env`. The key was sourced through vault injection, written without displaying it, and verified against Next's native loader. The tracked `.env.example` contains only an empty key assignment; reviewers provide their own key. The provider adapter retains the previously reviewed bounds, cleanup, redirects and malformed-thought checks. Prompts v3, contracts and arbitration are unchanged.
+The current `gemini-3.5-flash-lite` integration uses server-side configuration loaded by Next. The tracked `.env.example` contains only an empty key assignment; reviewers provide their own key. The provider adapter retains the previously reviewed bounds, cleanup, redirects and malformed-thought checks. Prompts v3, contracts and arbitration are unchanged.
 
 [Direct-module configuration smoke](evaluation/gemini-env-smoke-1794931245241.json), using the current coach module and Next-loaded `.env` without vault injection: English everyday returned provider HTTP503 in 2.2 seconds; Urdu everyday reached the 14-second stage deadline; immediate physical crisis returned HTTP200 and the expected fixed urgent reply in 9.2 seconds. The successful crisis call establishes that this configured key can make a generation request. The two failed calls leave availability unresolved. This is not an HTTP-route or browser acceptance test, and no raw provider text or key was saved.
 
@@ -40,9 +60,9 @@ The standalone HTML passed focused browser checks in an offline browser context:
 
 ## Historical revision: OpenRouter and reviewer configuration
 
-Earlier on 17 November the user requested another free model and configuration without vault access. That revision pinned `particle-ai/particle-1:free`, with strict JSON output, disabled reasoning, unchanged v3 policy, no fallback/retries, and zero prompt/completion/request price caps. The owner used an existing vault credential; reviewers supplied their own key in `.env`.
+An earlier revision on 17 November pinned `particle-ai/particle-1:free`, with strict JSON output, disabled reasoning, unchanged v3 policy, no fallback/retries, and zero prompt/completion/request price caps. Credentials remained server-side.
 
-- **261 tests in 9 files**, typecheck and production build passed. An ignored historical verification copy initially inflated worker counts to 507; Vitest now includes only `tests/**/*.test.ts`. No historical-copy tests are counted in 261.
+- **261 tests in 9 files**, typecheck and production build passed. Vitest includes only `tests/**/*.test.ts`, excluding historical verification copies. No historical-copy tests are counted in 261.
 - `.env.example` contains an empty server-only key. Local `.env` variants are ignored; the example is eligible for tracking. Next's native loader was verified with an isolated fictional key. No real credential was copied into a file.
 - Astryx doctor: **21 pass, 0 fail, 2 warnings**. The PATH warning remains. Its source scanner includes the ignored verification copy, doubling the same 13 inline-style findings to 26; these are wrapping/bidi/token styles, not new UI violations.
 - [Free-provider preflight](evaluation/free-provider-preflight.json): Particle-1 completed English and Urdu draft/review plus crisis classification (five HTTP200 calls, reported cost zero). Ling timed out twice and returned 429; Ernie returned 400; Nemotron's mixed-language Urdu draft was rejected by review. An additional NVIDIA-hosted Mistral model timed out on all three cases. These checks selected a usable endpoint; they do not establish reliability.
