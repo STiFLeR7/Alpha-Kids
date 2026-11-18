@@ -178,7 +178,7 @@ No generated phone numbers, country inference from Urdu, diagnosis, treatment/do
 
 ## Provider and verification
 
-Implemented: **`gemini-3.5-flash-lite` for both calls through Gemini**, pinned in lib/gemini.ts. Prompts remain DRAFT_SYSTEM_V3 and REVIEW_SYSTEM_V3. Current configuration smoke and production-browser calls include successful everyday/crisis replies and provider failures; availability and full quality acceptance remain open. Current and historical observations are preserved in docs/EVALUATION.md.
+Implemented: **`gemini-3.5-flash-lite` for both calls through Gemini**, pinned in lib/gemini.ts. Current prompts are DRAFT_SYSTEM_V4 and REVIEW_SYSTEM_V4; v4 reinforces practical follow-ups, one essential clarification fact and meaningful check-ins. Schemas and arbitration are unchanged. Current configuration smoke and production-browser calls include successful everyday/crisis replies and provider failures; availability and full quality acceptance remain open. Current and historical observations are preserved in docs/EVALUATION.md.
 
 Native fetch posts to `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:generateContent`, with server-only `GEMINI_API_KEY` in `x-goog-api-key`, systemInstruction and user contents. generationConfig uses `responseMimeType: application/json`, `responseJsonSchema`, and LOW thinking. Local Zod validation remains authoritative. Next loads the ignored local `.env` natively; copy `.env.example` and supply your own Gemini key. Never print or commit keys. No automatic model/key rotation, retries or fallback.
 

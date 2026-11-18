@@ -18,7 +18,10 @@ export async function generateJson(args: {system:string;input:string;schema:obje
       method:'POST',redirect:'error',signal:controller.signal,headers:{'content-type':'application/json','x-goog-api-key':key},
       body:JSON.stringify({systemInstruction:{parts:[{text:args.system}]},contents:[{role:'user',parts:[{text:args.input}]}],generationConfig:{responseMimeType:'application/json',responseJsonSchema:args.schema,maxOutputTokens:args.maxOutputTokens,thinkingConfig:{thinkingLevel:'LOW'}}})
     }),aborted]);
-    if (!response.ok) throw new CoachError('provider_failure');
+    if (!response.ok) throw new CoachError('provider_failure', {
+      httpStatus:response.status,
+      category:response.status===429?'quota_or_rate_limit':response.status===401||response.status===403?'access':response.status===400?'request_configuration':response.status>=500?'provider_service':'other',
+    });
     if (!response.body || Number(response.headers.get('content-length'))>LIMITS.providerBytes) throw new CoachError('invalid_output');
     reader=response.body.getReader();
     const chunks:Uint8Array[]=[];

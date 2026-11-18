@@ -11,6 +11,7 @@ Root documents describe the app and its approved design. This folder contains ve
 | [Execution plan](../PLAN.md) | Approved sequence and ownership; historical plan, not a completion claim. |
 | [Delivery checklist](STATUS.md) | Current completed, remaining and blocked items, including later revisions. |
 | [Evaluation](EVALUATION.md) | Actual offline/live checks, failures, prompt revisions and remaining limitations. |
+| [Response quality](QUALITY.md) | Offline review of returned replies, fixture expectations and a human acceptance rubric. |
 | [Scenario fixtures](../tests/fixtures/scenarios.json) | Fictional regression conversations and expected routes. |
 | [Run artifacts](evaluation/) | Dated synthetic requests, validated public responses, timing and mechanical checks. |
 | [Walkthrough](WALKTHROUGH.md) | Recording details, scenario timing and provenance. |

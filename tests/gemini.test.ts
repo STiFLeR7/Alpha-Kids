@@ -18,6 +18,13 @@ it('caps stalled provider reading under the stage deadline',async()=>{
 });
 const ctx=()=>({signal:new AbortController().signal,deadlineAt:Date.now()+30000});
 const args={system:'policy',input:'fiction',schema:{type:'object'},maxOutputTokens:1024};
+for (const [status, category] of [[429,'quota_or_rate_limit'],[401,'access'],[403,'access'],[400,'request_configuration'],[503,'provider_service']] as const) it(`retains safe provider diagnostics for ${status}`, async () => {
+ vi.stubEnv('GEMINI_API_KEY','fiction');
+ vi.stubGlobal('fetch',vi.fn().mockResolvedValue(new Response('SECRET_PROVIDER_BODY',{status})));
+ const error=await generateJson(args,ctx()).catch(error=>error);
+ expect(error).toMatchObject({reason:'provider_failure',diagnostic:{httpStatus:status,category}});
+ expect(JSON.stringify(error)).not.toContain('SECRET_PROVIDER_BODY');
+});
 afterEach(()=>{vi.unstubAllGlobals();vi.unstubAllEnvs();});
 function response(value:unknown){vi.stubEnv('GEMINI_API_KEY','fiction-key');vi.stubGlobal('fetch',vi.fn().mockResolvedValue(new Response(JSON.stringify(value))));}
 it('extracts only non-thought JSON',async()=>{response({candidates:[{finishReason:'STOP',content:{parts:[{thought:true,text:'private'},{text:'{"ok":true}'}]}}]});expect(await generateJson(args,ctx())).toEqual({ok:true});});

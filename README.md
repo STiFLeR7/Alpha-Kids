@@ -69,10 +69,19 @@ npm run build
 npm run astryx -- doctor --built .
 ```
 
+Run the browser regressions after building:
+
+```sh
+npm run test:browser:install
+npm run test:browser
+```
+
+They start a local production server and use explicit response fixtures; no provider key or model calls are required. On Linux, Chromium may also need system packages (`npm exec playwright install --with-deps chromium`).
+
 With the local app running, evaluate the fictional scenario matrix:
 
 ```sh
-npm run eval -- --settings-ref "Gemini gemini-3.5-flash-lite; thinking LOW; draft2048/review1024; promptsV3"
+npm run eval -- --settings-ref "Gemini gemini-3.5-flash-lite; thinking LOW; draft2048/review1024; promptsV4"
 ```
 
 The runner writes dated evidence in `docs/evaluation/`, preserves failures and performs no automatic retries. Exit zero establishes mechanical checks only. See [evaluation](docs/EVALUATION.md) and [walkthrough](docs/WALKTHROUGH.md) for results and recording status.
@@ -82,6 +91,8 @@ The runner writes dated evidence in `docs/evaluation/`, preserves failures and p
 Use fictional, non-identifying examples. Messages and history go to Google's Gemini API. The app does not persist conversations; provider processing and account privacy settings remain separate and have not been independently verified. This is an application for adult parents, not a child-facing app or medical/legal service.
 
 Both stages pin `gemini-3.5-flash-lite` with LOW thinking, with no automatic fallback or retry. Ordinary answers use two calls; a validated urgent/safeguarding route uses one. Account quota, availability and billing apply; this setup makes no free-tier or zero-cost guarantee. The app preserves your message when a request fails.
+
+This is bring-your-own-key: each installation uses its own server-side `GEMINI_API_KEY`. The application does not use a coding subscription. If requests fail, the server terminal records only a numeric upstream HTTP status and a fixed category. `429 / quota_or_rate_limit` means the configured account needs available quota or a later retry; `401`/`403` indicates access, and `400` indicates request configuration. Provider bodies, keys and conversation text are excluded from these diagnostics. A public 503 response alone does not identify the upstream cause.
 
 ## Documentation and coding agents
 

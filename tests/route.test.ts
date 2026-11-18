@@ -4,6 +4,19 @@ vi.mock('../lib/coach',()=>({coach:vi.fn()}));
 import {POST} from '../app/api/coach/route';
 import {coach} from '../lib/coach';
 import {NextRequest} from 'next/server';
+import {CoachError} from '../lib/errors';
+it('reports only safe provider diagnostics on the server, never in public output',async()=>{
+ const warn=vi.spyOn(console,'warn').mockImplementation(()=>{});
+ try {
+ vi.mocked(coach).mockRejectedValueOnce(new CoachError('provider_failure',{httpStatus:429,category:'quota_or_rate_limit'}));
+ const result=await POST(req());
+ expect(warn).toHaveBeenCalledWith('coach_provider_error',{httpStatus:429,category:'quota_or_rate_limit'});
+ const publicText=await result.text();
+ expect(publicText).not.toContain('diagnostic');
+ expect(publicText).not.toContain('quota_or_rate_limit');
+ expect(publicText).not.toContain('429');
+ } finally {warn.mockRestore();}
+});
 it('accepts Next-normalized loopback URLs only when actual Host and Origin match',async()=>{
  vi.mocked(coach).mockReset().mockResolvedValue({kind:'clarify',reason:'missing_context',language:'en',question:'How old is your child?'});
  const normalized=new NextRequest(req());

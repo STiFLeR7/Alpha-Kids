@@ -4,6 +4,24 @@ Dated **18 November 2026**. This is a small developer regression exercise, not s
 
 ## Submission verification — 18 November
 
+### Provider diagnostics and repeatable browser checks
+
+The [offline response-quality review](QUALITY.md) assessed all 11 returned replies and all 26 fixture expectations from the earlier run. It confirmed that the Urdu follow-up should offer another age-neutral action, rather than request age and bedtime behavior. Existing expected routes were retained. Prompt v4 adds this clarification to both draft and review, requires one meaningful action-related check-in, limits essential clarification to one fact and rejects unreported attempt counts/outcomes. Risk precedence, fixed copy, schemas and deterministic arbitration are unchanged.
+
+The [focused v4 live check](evaluation/live-2026-11-18T03-54-57.687Z-950d79a4-ec1c-4c3c-a508-7e1632db49b0.json) reused the unchanged `screen-time`, `urdu-bedtime` and `physical-emergency` fixtures. All **five requests returned HTTP200**, matching their expected routes and languages, in 1.9–3.7 seconds each. Both ordinary follow-ups offered different actions and ended with a prospective check-in; crisis selected the fixed urgent response. Coding-agent text inspection found no medical/legal instructions or unnecessary clarification in these outputs. Physical-activity and touch examples still require ordinary age/comfort judgment, and Urdu naturalness has not had independent native review. This small targeted run is not a full-matrix pass or reliability guarantee. Its original semantic-review fields remain pending for independent review.
+
+A bounded integration review found no actionable code defects in the diagnostics, public-error boundary, prompt-policy change or browser-test isolation. It inspected the saved evidence and attributed the executed checks above to the integrator; it did not rerun them or certify semantic safety.
+
+The adapter now retains only upstream HTTP status and a fixed error category on internal errors. The route writes these safe fields to the server terminal; the public error schema and messages are unchanged. Five transport tests were observed failing before adding the metadata, then passed. A separate route test failed before server reporting was added, then passed while asserting that diagnostics are absent from public output. No provider body, credential, request text or private reasoning is logged.
+
+The [instrumented run](evaluation/live-2026-11-18T03-51-11.334Z-433de3b8-e114-44f7-881d-689c500ea11b.json) attempted 28 requests across 26 scenarios: 11 replies, 9 matching expected routes, and 17 public HTTP503 failures. The corresponding 17 server diagnostic entries all reported **upstream HTTP429 / quota_or_rate_limit**. Thus these failures reflect the configured account's quota or rate limit, rather than upstream HTTP503 service responses. The metadata does not distinguish a daily quota from a short-term rate limit, and does not establish that a paid account resolves it. Both English and Urdu ordinary follow-ups returned clarification instead of the expected different practical step. Failed scenarios remain unverified.
+
+A minimal synthetic configuration request returned HTTP200 before that run. This confirms usable access, not adequate quota for a whole matrix. Visitor installations continue to use their own server-side Gemini key. Coding-subscription review is offline evaluation only; the running application has no dependency on that subscription.
+
+Portable Chromium regressions now live in `tests/browser/coach.spec.ts` and run with `npm run test:browser` after a build and browser install. All nine passed against the freshly rebuilt production app; the implementation check also repeated them twice successfully. They cover focus, retry/edit, cancel/stale replies, confirmed reset, privacy dialog, input limits/newline, inert HTML-like text and 320-pixel English/Urdu direction. All provider responses are explicit fixtures. No provider calls are made. Current combined count: **258 unit/integration tests**, plus nine browser tests; typecheck and production build passed.
+
+`npm audit --omit=dev` reports zero vulnerabilities. The full audit reports seven high-severity development-tool findings through `picomatch`; the configured registry currently provides 4.0.7 as its latest version, within the reported affected range. No speculative override or tooling downgrade was applied. This remains a development-dependency limitation.
+
 Fresh checks on the source at `13a8de4`:
 
 | Check | Result |
@@ -31,7 +49,7 @@ npm test
 npm run typecheck
 npm run build
 npm run astryx -- doctor --built .
-npm run eval -- --settings-ref "Gemini gemini-3.5-flash-lite; LOW; A2048/B1024; promptsV3; 14s/30s"
+npm run eval -- --settings-ref "Gemini gemini-3.5-flash-lite; LOW; A2048/B1024; promptsV4; 14s/30s"
 ```
 
 The current fixture contains **26 scenarios / 32 planned requests**: the original 22 scenarios / 26 requests plus four explicit repeats of uncertain danger and retained imminent risk, added after observed failures. Twelve behavior families cover normal English/Urdu, follow-up, clarification, emergency, abuse, distress, mixed language, retained danger, idiom/history, medical/legal boundaries and injection.
@@ -40,7 +58,7 @@ The sequential runner validates real responses, sends exact loopback Origin, cha
 
 ## Current revision: Gemini and local configuration
 
-The current `gemini-3.5-flash-lite` integration uses server-side configuration loaded by Next. The tracked `.env.example` contains only an empty key assignment; reviewers provide their own key. The provider adapter retains the previously reviewed bounds, cleanup, redirects and malformed-thought checks. Prompts v3, contracts and arbitration are unchanged.
+The `gemini-3.5-flash-lite` restoration used server-side configuration loaded by Next. The tracked `.env.example` contains only an empty key assignment; reviewers provide their own key. That revision retained prompts v3, contracts and arbitration. The later v4 quality revision is recorded separately; historical artifacts retain their original settings.
 
 [Direct-module configuration smoke](evaluation/gemini-env-smoke-1794931245241.json), using the current coach module and Next-loaded `.env` without vault injection: English everyday returned provider HTTP503 in 2.2 seconds; Urdu everyday reached the 14-second stage deadline; immediate physical crisis returned HTTP200 and the expected fixed urgent reply in 9.2 seconds. The successful crisis call establishes that this configured key can make a generation request. The two failed calls leave availability unresolved. This is not an HTTP-route or browser acceptance test, and no raw provider text or key was saved.
 

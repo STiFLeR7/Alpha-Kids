@@ -63,6 +63,7 @@ export async function POST(request:Request):Promise<Response>{
     const reply=await Promise.race([coach(input,{signal:controller.signal,deadlineAt}),aborted]);
     return respond({requestId:input.requestId,ok:true,reply},200);
   }catch(error){
+    if(error instanceof CoachError && error.diagnostic) console.warn('coach_provider_error', {httpStatus:error.diagnostic.httpStatus,category:error.diagnostic.category});
     const reason=controller.signal.aborted?'deadline':error instanceof CoachError?error.reason:'provider_failure';
     return respond({requestId,ok:false,error:errorCopy(reason,language)},statuses[reason]);
   }finally{
